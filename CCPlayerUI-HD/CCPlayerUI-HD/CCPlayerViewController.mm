@@ -7,16 +7,25 @@
 //
 
 #import "CCPlayerViewController.h"
+#import "CCPlayerHeaderView.h"
+#import "CCPlayerMaskView.h"
+#import "CCPlayerFooterView.h"
 #import "CCPlayerRenderView.h"
 #import "PlayerAdapter.h"
+
+#define PLAYER_HEADER_VIEW_HEIGHT   80
+#define PLAYER_FOOTER_VIEW_HEIGHT   100
 
 @interface CCPlayerViewController ()
 {
     //this is a C++ object
-    CCPlayerViewAdapter* _playerViewAdapter;
+    CCPlayerViewAdapter*    _playerViewAdapter;
     
     //this is a oc object
-    CCPlayerRenderView* _playerRenderView;
+    CCPlayerRenderView*     _playerRenderView;
+    CCPlayerMaskView*       _playerMaskView;
+    CCPlayerHeaderView*     _PlayerHeaderView;
+    CCPlayerFooterView*     _playerFooterView;
 }
 
 @end
@@ -27,16 +36,6 @@
     
     if(self = [super initWithCoder:aDecoder])
     {
-        // Do any additional setup after loading the view.
-
-        // Custom initialization
-        //create the C++ object
-        _playerViewAdapter = new CCPlayerViewAdapter(self);
-        
-        //create the oc object
-        CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        _playerRenderView = [[CCPlayerRenderView alloc] initWithFrame:screenBounds];
-        [self.view addSubview:_playerRenderView];
     }
     
     return self;
@@ -46,6 +45,45 @@
 {
     [super viewDidLoad];
 
+    // Do any additional setup after loading the view.
+    
+    // Custom initialization
+    //create the C++ object
+    _playerViewAdapter = new CCPlayerViewAdapter(self);
+    
+    CGRect rectScreen = [[UIScreen mainScreen] bounds];
+    
+    //pretend the views OrientationIsLandscape
+    CGRect rectDisplay = CGRectMake(rectScreen.origin.x,
+                                    rectScreen.origin.y,
+                                    rectScreen.size.height,
+                                    rectScreen.size.width);
+    CGRect rectMask = CGRectMake(rectScreen.origin.x,
+                                    rectScreen.origin.y,
+                                    rectScreen.size.height,
+                                 rectScreen.size.width);
+    CGRect rectHeader = CGRectMake(rectScreen.origin.x,
+                                   rectScreen.origin.y,
+                                   rectScreen.size.height,
+                                   PLAYER_HEADER_VIEW_HEIGHT);
+    CGRect rectFooter = CGRectMake(rectScreen.origin.x,
+                                   rectScreen.size.width - PLAYER_FOOTER_VIEW_HEIGHT,
+                                   rectScreen.size.height,
+                                   PLAYER_FOOTER_VIEW_HEIGHT);
+    
+    _playerRenderView = [[CCPlayerRenderView alloc] initWithFrame:rectDisplay];
+    _playerMaskView = [[CCPlayerMaskView alloc] initWithFrame:rectMask];
+    _playerMaskView.backgroundColor = [UIColor clearColor];
+    _PlayerHeaderView = [[CCPlayerHeaderView alloc] initWithFrame:rectHeader];
+    _PlayerHeaderView.backgroundColor = [UIColor clearColor];
+    _playerFooterView = [[CCPlayerFooterView alloc] initWithFrame:rectFooter];
+    _playerFooterView.backgroundColor = [UIColor clearColor];
+    
+    [self.view addSubview:_playerRenderView];
+    [self.view addSubview:_playerMaskView];
+    [self.view addSubview:_PlayerHeaderView];
+    [self.view addSubview:_playerFooterView];
+    
     NSString* medaiPath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"flv"];
     NSLog(@"The mediaPath is : %@", medaiPath);
     
@@ -91,6 +129,15 @@
         [_playerRenderView swapBuffers];
     }
     return 0;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return UIInterfaceOrientationIsLandscape(toInterfaceOrientation);
+}
+
+- (void)layoutSubviews
+{
 }
 
 - (void)dealloc

@@ -86,7 +86,6 @@ void CCGLWrapper::InitGL()
     m_pIGLRenderView->GetRenderViewRect(&x, &y, &width, &height);
     
     glViewport(0, 0, width, height);
-    GLCheckError();
 }
 
 GLuint CCGLWrapper::compileShader(GLenum shaderType, const char** pShaderContext, int contextLength)

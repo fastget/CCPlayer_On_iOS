@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-//current is for player adapter
 #import "PlayerAdapterProtocol.h"
+#import "ViewInterContactProtocals.h"
 
-@interface CCPlayerViewController : UIViewController <PlayerDelegate>
+@interface CCPlayerViewController : UIViewController <PlayerDelegate,
+                                                      CCMaskViewToViewControllerDelegate,
+                                                      CCHeaderViewToViewControllerDelegate,
+                                                      CCFooterViewToViewControllerDelegate>
 
 @end
