@@ -18,7 +18,7 @@ class VideoFrame
 public:
 	VideoFrame(const unsigned char* pFrameData,
                int frameSize,
-               double showTime)
+               int64_t showTime)
 	{
 	    m_frameSize = frameSize;
 
@@ -86,7 +86,7 @@ public:
         return m_frameSize;
     }
 
-    double GetShowTime()
+    int64_t GetShowTime()
     {
         return m_showTime;
     }
@@ -96,7 +96,7 @@ private:
 	int m_frameSize;
 
 private:
-	double m_showTime;
+	int64_t m_showTime;
 };
 
 }

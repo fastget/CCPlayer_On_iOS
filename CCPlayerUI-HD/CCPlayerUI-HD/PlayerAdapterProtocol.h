@@ -16,6 +16,7 @@
 - (CGRect)getRenderViewRect;
 
 //call the run the function in the main thread
-- (void)onCmmandOpen:(int)errCode;
+- (void)onCommandOpen:(NSArray*)errCode;
+- (void)onCommandStop:(NSArray*)errCode;
 
 @end

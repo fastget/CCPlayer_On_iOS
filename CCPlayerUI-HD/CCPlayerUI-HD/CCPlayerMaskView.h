@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ViewInterContactProtocals.h"
+
 @interface CCPlayerMaskView : UIView
+
+@property (strong, nonatomic) NSObject<CCMaskViewToViewControllerDelegate>* delegate;
 
 @end

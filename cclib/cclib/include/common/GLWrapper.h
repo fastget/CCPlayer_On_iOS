@@ -17,6 +17,7 @@ public:
 
 public:
     void SetIGLRenderView(IGLView* pGLRenderView);
+    int ClearGLRenderView();
     int DrawFrame(VideoFrame* pVideoFrame, int width, int height);
 
 private:
@@ -28,6 +29,9 @@ private:
 
 private:
     void GLCheckError();
+    
+private:
+    bool m_bFirstTime;
     
 private:
     IGLView* m_pIGLRenderView;

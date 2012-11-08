@@ -217,12 +217,7 @@ void CCVideoDecoder::Run()
                 } // end if the audio frame is enough
                 else if(bDataManagerEof)
                 {
-                    PostMessage(MESSAGE_OBJECT_ENUM_VIDEO_DECODER,
-                                MESSAGE_OBJECT_ENUM_VIDEO_RENDER,
-                                MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF,
-                                Any());
-                    m_bRunning = false;
-                    break;
+                    status = VIDEO_DECODER_STATUS_ENUM_DEADED;
                 }else
                 {
                     usleep(10 * 1000);
@@ -244,6 +239,11 @@ void CCVideoDecoder::Run()
             break;
             case VIDEO_DECODER_STATUS_ENUM_DEADED:
             {
+                PostMessage(MESSAGE_OBJECT_ENUM_VIDEO_DECODER,
+                            MESSAGE_OBJECT_ENUM_PLAYER,
+                            MESSAGE_TYPE_ENUM_VIDEO_DECODER_DEADED,
+                            Any());
+                
                 m_bRunning = false;
                 continue;
             }

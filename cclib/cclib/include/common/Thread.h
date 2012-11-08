@@ -20,8 +20,6 @@ public:
 
 protected:
     bool m_bRunning;
-
-private:
 	pthread_t m_threadId;
 
 	//declare the Call back function

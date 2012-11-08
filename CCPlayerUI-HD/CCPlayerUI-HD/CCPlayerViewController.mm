@@ -24,13 +24,15 @@
     //this is a oc object
     CCPlayerRenderView*     _playerRenderView;
     CCPlayerMaskView*       _playerMaskView;
-    CCPlayerHeaderView*     _PlayerHeaderView;
+    CCPlayerHeaderView*     _playerHeaderView;
     CCPlayerFooterView*     _playerFooterView;
 }
 
 @end
 
 @implementation CCPlayerViewController
+
+#pragma --mark "The system interface"
 
 -(id)initWithCoder:(NSCoder *)aDecoder {
     
@@ -74,17 +76,22 @@
     _playerRenderView = [[CCPlayerRenderView alloc] initWithFrame:rectDisplay];
     _playerMaskView = [[CCPlayerMaskView alloc] initWithFrame:rectMask];
     _playerMaskView.backgroundColor = [UIColor clearColor];
-    _PlayerHeaderView = [[CCPlayerHeaderView alloc] initWithFrame:rectHeader];
-    _PlayerHeaderView.backgroundColor = [UIColor clearColor];
+    _playerMaskView.delegate = self;
+    _playerHeaderView = [[CCPlayerHeaderView alloc] initWithFrame:rectHeader];
+    _playerHeaderView.backgroundColor = [UIColor clearColor];
+    _playerHeaderView.delegate = self;
     _playerFooterView = [[CCPlayerFooterView alloc] initWithFrame:rectFooter];
     _playerFooterView.backgroundColor = [UIColor clearColor];
+    _playerFooterView.delegate = self;
     
     [self.view addSubview:_playerRenderView];
     [self.view addSubview:_playerMaskView];
-    [self.view addSubview:_PlayerHeaderView];
+    [self.view addSubview:_playerHeaderView];
     [self.view addSubview:_playerFooterView];
     
     NSString* medaiPath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"flv"];
+    _playerHeaderView.textViewTitle.text = @"扔掉假睫毛";
+    
     NSLog(@"The mediaPath is : %@", medaiPath);
     
     _playerViewAdapter->Open(medaiPath);
@@ -96,17 +103,47 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-    NSLog(@"Prepare change to second view");
-    NSLog(@"%@", [segue identifier]);
+    return UIInterfaceOrientationIsLandscape(toInterfaceOrientation);
 }
 
-//call the run the function in the main thread
-- (void)onCmmandOpen:(int)errCode
+- (void)layoutSubviews
+{
+}
+
+- (void)dealloc
+{
+    if (_playerRenderView != nil)
+    {
+        _playerRenderView = nil;
+    }
+    
+    if (_playerViewAdapter != NULL)
+    {
+        delete _playerViewAdapter;
+        _playerViewAdapter = NULL;
+    }
+}
+
+
+#pragma --mark "cc player callbacks"
+- (void)onCommandOpen:(NSArray*)errCode
 {
     _playerViewAdapter->SetGLRenderView();
 }
+
+- (void)onCommandStop:(NSArray*)errCode
+{
+    if (_playerViewAdapter != NULL)
+    {
+        delete _playerViewAdapter;
+        _playerViewAdapter = NULL;
+    }
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 
 - (CGRect)getRenderViewRect
 {
@@ -131,27 +168,17 @@
     return 0;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+#pragma --mark "player user actions"
+
+- (void)backButtonPressed
 {
-    return UIInterfaceOrientationIsLandscape(toInterfaceOrientation);
+    _playerViewAdapter->Stop();
 }
 
-- (void)layoutSubviews
+- (void)twoFingersTapTwice
 {
-}
-
-- (void)dealloc
-{
-    if (_playerRenderView != nil)
-    {
-        _playerRenderView = nil;
-    }
-    
-    if (_playerViewAdapter != NULL)
-    {
-        delete _playerViewAdapter;
-        _playerViewAdapter = NULL;
-    }
+    _playerHeaderView.hidden = !_playerHeaderView.hidden;
+    _playerFooterView.hidden = !_playerFooterView.hidden;
 }
 
 @end

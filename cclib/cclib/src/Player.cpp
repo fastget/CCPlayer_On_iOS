@@ -7,22 +7,32 @@
 
 namespace CCPlayer
 {
-
+#define AUDIO_RENDER_DEADED     1
+#define AUDIO_DECODER_DEADED    2
+#define VIDEO_RENDER_DEADED     3
+#define VIDEO_DECODER_DEADED    4
+#define DATA_MANAGER_DEADED     5
+#define ALL_MODULE_ARE_DEADED   (1 + 2 + 3 + 4 +5)
+    
 CCPlayer::CCPlayer(ICommandResponse* pICommandResponse)
 :m_pAVFormatCtx(NULL)
 {
     m_pCommandResponseObject = pICommandResponse;
     
-    //this will start the message center thread
+    //this will start the message center thread , and will create the message center object
     CCMessageCenter::GetInstance()->InitMessageCenter();
     CCMessageCenter::GetInstance()->RegisterMessageReceiver(MESSAGE_OBJECT_ENUM_PLAYER, this);
 
+    //This is the first time call , just for create the system clock instance
+    CCSystemClock::GetInstance();
+    
     Launch();
 }
 
 CCPlayer::~CCPlayer()
 {
-    CCMessageCenter::GetInstance()->UnRegisterMessageReceiver(MESSAGE_OBJECT_ENUM_PLAYER);
+    //we can not unregister the message center here
+    //CCMessageCenter::GetInstance()->UnRegisterMessageReceiver(MESSAGE_OBJECT_ENUM_PLAYER);
 }
 
 void CCPlayer::SetGLRenderView(IGLView* pIGLRenderView)
@@ -122,7 +132,7 @@ bool CCPlayer::PopFrontMessage(SmartPtr<Event>& rSmtEvent)
 
 void CCPlayer::Run()
 {
-    //CCSystemClock::GetInstance()->RegisterSystemAlarm(this);
+    int isAllModuleAreDeaded = 0;
     while(m_bRunning)
     {
         SmartPtr<Event> event;
@@ -168,6 +178,7 @@ void CCPlayer::Run()
                                                                     Any());
                 }
                 break;
+                //the user stop the player
                 case COMMAND_TYPE_ENUM_STOP:
                 {
                     PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
@@ -218,30 +229,99 @@ void CCPlayer::Run()
 
                     if(m_pCommandResponseObject != NULL)
                     {
-                        m_pCommandResponseObject->OnCmmandOpen(ret);
+                        m_pCommandResponseObject->OnCommandOpen(ret);
                     }
                 }
                 break;
                 case MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF:
                 {
+//                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_DATA_MANAGER);
+//                    
+//                    isAllModuleAreDeaded += DATA_MANAGER_DEADED;
+//                    
+//                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
+//                    {
+//                        DestructPlayerSystem();
+//                    }
                     //m_bRunning = false;
                     //continue;
+                }
+                break;
+                case MESSAGE_TYPE_ENUM_AUDIO_RENDER_DEADED:
+                {
+                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_AUDIO_RENDER);
+                    
+                    isAllModuleAreDeaded += AUDIO_RENDER_DEADED;
+                    
+                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
+                    {
+                        DestructPlayerSystem();
+                    }
+                }
+                break;
+                case MESSAGE_TYPE_ENUM_AUDIO_DECODER_DEADED:
+                {
+                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_AUDIO_DECODER);
+                    
+                    isAllModuleAreDeaded += AUDIO_DECODER_DEADED;
+                    
+                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
+                    {
+                        DestructPlayerSystem();
+                    }
+                }
+                break;
+                case MESSAGE_TYPE_ENUM_VIDEO_RENDER_DEADED:
+                {
+                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_VIDEO_RENDER);
+                    
+                    isAllModuleAreDeaded += VIDEO_RENDER_DEADED;
+                    
+                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
+                    {
+                        DestructPlayerSystem();
+                    }
+                }
+                break;
+                case MESSAGE_TYPE_ENUM_VIDEO_DECODER_DEADED:
+                {
+                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_VIDEO_DECODER);
+                    
+                    isAllModuleAreDeaded += VIDEO_DECODER_DEADED;
+                    
+                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
+                    {
+                        DestructPlayerSystem();
+                    }
+                }
+                    break;
+                case MESSAGE_OBJECT_ENUM_DATA_MANAGER_DEADED:
+                {
+                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_DATA_MANAGER);
+                    
+                    isAllModuleAreDeaded += DATA_MANAGER_DEADED;
+                    
+                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
+                    {
+                        DestructPlayerSystem();
+                    }
                 }
                 break;
             }
         }
 
-//        CCFrequencyWorker::Wait();
-//        CCFrequencyWorker::Wait();
-//        CCFrequencyWorker::Wait();
-//        CCFrequencyWorker::Wait();
-//        CCFrequencyWorker::Wait();
-//        CCFrequencyWorker::Wait();
-
         //std::cout << "The play is running" << std::endl;
     }
-
-    //CCSystemClock::GetInstance()->UnRegisterSystemAlarm(this);
+}
+    
+void CCPlayer::DestructPlayerSystem()
+{
+    CCSystemClock::DestoryInstance();
+    
+    //this fuction will wait util the message center thread is deaded
+    CCMessageCenter::DestoryInstance();
+    
+    m_pCommandResponseObject->OnCommandStop(0);
 }
 
 }

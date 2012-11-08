@@ -79,7 +79,7 @@ void ALWrapper::Create(const std::string &deviceName)
 	alSourcei(m_audSource, AL_BUFFER, 0);
 	assert(alGetError() == AL_NO_ERROR && "Could not rewind buffers");
     
-    alSourcef(m_audSource, AL_GAIN, 0.0f);
+    alSourcef(m_audSource, AL_GAIN, 0.5f);
 }
 
 void ALWrapper::InitAudioFrame(AudioFrame* pAudioFrame, int index)
@@ -94,6 +94,14 @@ void ALWrapper::InitAudioFrame(AudioFrame* pAudioFrame, int index)
     {
         std::cout << "Init audio render." << std::endl;
     }
+}
+    
+int64_t ALWrapper::GetReadPlayedTime()
+{
+    ALint offset;
+    alGetSourcei(m_audSource, AL_SAMPLE_OFFSET, &offset);
+    int64_t timestamp = static_cast<int64_t>(offset) * 1000000 / m_audRate;
+    return timestamp;
 }
 
 bool ALWrapper::NeedData()
@@ -154,14 +162,14 @@ void ALWrapper::Play()
     alGetSourcei(m_audSource, AL_SOURCE_STATE, &state);
     if (alGetError() != AL_NO_ERROR)
     {
-        //std::cout << "Cannot check OpenAL source state." << std::endl;
+        std::cout << "Cannot check OpenAL source state." << std::endl;
     }
     if (state != AL_PLAYING)
     {
         alSourcePlay(m_audSource);
         if (alGetError() != AL_NO_ERROR)
         {
-            //std::cout << "Cannot restart OpenAL source playback." << std::endl;
+            std::cout << "Cannot restart OpenAL source playback." << std::endl;
         }
     }
 //    alSourcePlay(m_audSource);

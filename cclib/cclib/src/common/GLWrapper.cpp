@@ -64,6 +64,7 @@ const std::string fragmentShaderString = SHADER_STRING
 
 CCGLWrapper::CCGLWrapper()
 :m_pIGLRenderView(NULL)
+,m_bFirstTime(true)
 {
 }
 
@@ -86,6 +87,8 @@ void CCGLWrapper::InitGL()
     m_pIGLRenderView->GetRenderViewRect(&x, &y, &width, &height);
     
     glViewport(0, 0, width, height);
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 GLuint CCGLWrapper::compileShader(GLenum shaderType, const char** pShaderContext, int contextLength)
@@ -234,15 +237,27 @@ GLuint CCGLWrapper::setupTexture()
     return texName;
     
 }
+    
+int CCGLWrapper::ClearGLRenderView()
+{
+    m_pIGLRenderView->PreDrawFrame();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    m_pIGLRenderView->SwapBuffers();
+    
+    return true;
+}
 
 int CCGLWrapper::DrawFrame(VideoFrame* pVideoFrame, int width, int height)
 {
     m_pIGLRenderView->PreDrawFrame();
     
-    static bool first = true;
-    if (first)
+    if (m_bFirstTime)
     {
         glGenTextures(1, &m_glTexture);
+        GLCheckError();
         glBindTexture(GL_TEXTURE_2D, m_glTexture);
         glTexParameterf(GL_TEXTURE_2D,
                         GL_TEXTURE_MIN_FILTER,
@@ -258,8 +273,10 @@ int CCGLWrapper::DrawFrame(VideoFrame* pVideoFrame, int width, int height)
         
         CompileShaders();
         
-        first = false;
+        m_bFirstTime = false;
     }
+    
+    glClear(GL_COLOR_BUFFER_BIT);
     
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);

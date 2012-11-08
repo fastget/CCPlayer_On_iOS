@@ -11,6 +11,11 @@ class IMessageReceiver
 {
 public:
     virtual void ReceiverMessage(const SmartPtr<Event>& rSmtEvent) = 0;
+    
+public:
+    virtual ~IMessageReceiver()
+    {
+    }
 };
 
 }

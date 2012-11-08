@@ -1,18 +1,12 @@
 #include "SystemClock.h"
-#include "FrequencyWorker.h"
 
 namespace CCPlayer
 {
 
-CCMutex CCSystemClock::m_instanceMutex;
 CCSystemClock* CCSystemClock::m_pInstance = NULL;
 
 CCSystemClock::CCSystemClock()
 {
-    //ctor
-    //every 15 ms tell the worker
-    int timeId = 0;
-    m_frequencyTimer.SetTimer(&timeId, 2500, this, NULL);
 }
 
 CCSystemClock::~CCSystemClock()
@@ -22,66 +16,41 @@ CCSystemClock::~CCSystemClock()
 
 CCSystemClock* CCSystemClock::GetInstance()
 {
-    m_instanceMutex.Lock();
     if(m_pInstance == NULL)
     {
         m_pInstance = new CCSystemClock();
     }
-    m_instanceMutex.UnLock();
 
     return m_pInstance;
 }
-
-
-void CCSystemClock::RegisterSystemAlarm(CCFrequencyWorker* pFrequencyWorker)
+    
+void CCSystemClock::DestoryInstance()
 {
-    m_frequencyWorkerMutex.Lock();
-    m_frequencyWorkerList.push_back(pFrequencyWorker);
-    m_frequencyWorkerMutex.UnLock();
-}
-
-void CCSystemClock::UnRegisterSystemAlarm(CCFrequencyWorker* pFrequencyWorker)
-{
-    m_frequencyWorkerMutex.Lock();
-
-    std::vector<CCFrequencyWorker*>::iterator pos = m_frequencyWorkerList.begin();
-    while(pos != m_frequencyWorkerList.end())
+    if (m_pInstance != NULL)
     {
-        if(*pos == pFrequencyWorker)
-        {
-            break;
-        }
-        pos ++;
+        delete m_pInstance;
+        m_pInstance = NULL;
     }
-
-    m_frequencyWorkerList.erase(pos);
-
-    m_frequencyWorkerMutex.UnLock();
 }
 
-void CCSystemClock::SetRealStartTime(int64_t realStartTime)
+void CCSystemClock::SetRealPlayedTime(int64_t realPlayedTime)
 {
-    m_realStartTime = realStartTime;
+    m_realPlayedTime = realPlayedTime;
 }
 
-int64_t CCSystemClock::GetRealStartTime()
+int64_t CCSystemClock::GetRealPlayedTime()
 {
-    return m_realStartTime;
+    return m_realPlayedTime;
 }
-
-void CCSystemClock::TimeElapsed(void* pUserData)
+    
+void CCSystemClock::SetVideoStartRender(bool bVideoStartRender)
 {
-    m_frequencyWorkerMutex.Lock();
-
-//    std::vector<CCFrequencyWorker*>::iterator pos = m_frequencyWorkerList.begin();
-//    while(pos != m_frequencyWorkerList.end())
-//    {
-//        //Wakeup the thread
-//        (*pos)->Post();
-//        pos ++;
-//    }
-
-    m_frequencyWorkerMutex.UnLock();
+    m_bVideoStartRender = bVideoStartRender;
+}
+    
+bool CCSystemClock::GetVideoStartRender()
+{
+    return m_bVideoStartRender;
 }
 
 }

@@ -150,7 +150,8 @@ void CCAudioRender::Run()
 
                     alWrapper.Play();
                     
-//                    usleep(30 * 1000);
+                    //usleep(30 * 1000);
+                    CCSystemClock::GetInstance()->SetVideoStartRender(true);
 
                     status = AUDIO_RENDER_STATUS_ENUM_UPDATING;
                 }
@@ -159,12 +160,13 @@ void CCAudioRender::Run()
             case AUDIO_RENDER_STATUS_ENUM_UPDATING:
             {
                 //std::cout << "Audio render are working" << m_audioFrameQueue.size() << std::endl;
-                int64_t startTime = av_gettime() / 1000;
+//                int64_t startTime = av_gettime() / 1000;
                 //CCFrequencyWorker::Wait();
-                usleep(10 * 1000);
-                int64_t endTime = av_gettime() / 1000;
-                std::cout << "The audio time span" << endTime - startTime << std::endl;
-                
+                CCSystemClock::GetInstance()->SetRealPlayedTime(alWrapper.GetReadPlayedTime());
+                usleep(20 * 1000);
+//                int64_t endTime = av_gettime() / 1000;
+//                std::cout << "The audio time span" << endTime - startTime << std::endl;
+//                
                 //std::cout << "audio frame empty()" << m_audioFrameQueue.empty()<< std::endl;
                 if(alWrapper.NeedData() && !m_audioFrameQueue.empty())
                 {
@@ -179,24 +181,14 @@ void CCAudioRender::Run()
                                 MESSAGE_TYPE_ENUM_AUDIO_RENDER_A_FRAME,
                                 Any());
                 }else if(bDataManagerEof)
-//                if (!m_audioFrameQueue.empty())
-//                {
-//                    usleep(40 * 1000);
-//                    
-//                    SmartPtr<AudioFrame> shrdAudioFrame = m_audioFrameQueue.front();
-//                    m_audioFrameQueue.pop();
-//                }
-//                else if(bDataManagerEof)
                 {
-                    PostMessage(MESSAGE_OBJECT_ENUM_AUDIO_RENDER,
-                                MESSAGE_OBJECT_ENUM_PLAYER,
-                                MESSAGE_TYPE_ENUM_AUDIO_DEADED,
-                                Any());
-                    m_bRunning = false;
-                    continue;
+                    status = AUDIO_RENDER_STATUS_ENUM_DEADED;
                 }
                 
                 alWrapper.Play();
+                //CCSystemClock::GetInstance()->SetRealPlayedTime(alWrapper.GetReadPlayedTime());
+            
+                
             } //end case AUDIO_RENDER_STATUS_ENUM_UPDATING
             break;
             case AUDIO_RENDER_STATUS_ENUM_SLEEPING:
@@ -213,6 +205,11 @@ void CCAudioRender::Run()
             break;
             case AUDIO_RENDER_STATUS_ENUM_DEADED:
             {
+                PostMessage(MESSAGE_OBJECT_ENUM_AUDIO_RENDER,
+                            MESSAGE_OBJECT_ENUM_PLAYER,
+                            MESSAGE_TYPE_ENUM_AUDIO_RENDER_DEADED,
+                            Any());
+                
                 m_bRunning = false;
                 continue;
             }

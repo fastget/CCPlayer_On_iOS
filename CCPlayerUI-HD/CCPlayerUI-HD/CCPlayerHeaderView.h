@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ViewInterContactProtocals.h"
+
 @interface CCPlayerHeaderView : UIView
+
+@property (strong, nonatomic) NSObject<CCHeaderViewToViewControllerDelegate>* delegate;
+@property (strong, nonatomic) UITextView* textViewTitle;
 
 @end

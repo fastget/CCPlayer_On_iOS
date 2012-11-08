@@ -7,7 +7,8 @@ namespace CCPlayer
 class ICommandResponse
 {
 public:
-    virtual void OnCmmandOpen(int ErrCode) = 0;
+    virtual void OnCommandOpen(int ErrCode) = 0;
+    virtual void OnCommandStop(int ErrCode) = 0;
 };
 
 }

@@ -12,7 +12,6 @@ enum DataManagerStatus
     DATA_MANAGER_STATUS_ENUM_INIT,
     DATA_MANAGER_STATUS_ENUM_WORKING,
     DATA_MANAGER_STATUS_ENUM_SLEEPING,
-    DATA_MANAGER_STATUS_ENUM_DEADING,
     DATA_MANAGER_STATUS_ENUM_DEADED,
     DATA_MANAGER_STATUS_ENUM_MAX
 };
@@ -213,18 +212,19 @@ void CCDataManager::Run()
                     SmartPtr<CCPacket> packet(new CCPacket());
                     if(av_read_frame(pAVFormatContext, packet.GetPtr()->GetPacketPointer()) < 0)
                     {
-                        PostMessage(MESSAGE_OBJECT_ENUM_DATA_MANAGER,
-                                    MESSAGE_OBJECT_ENUM_AUDIO_DECODER,
-                                    MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF,
-                                    Any());
+//                        PostMessage(MESSAGE_OBJECT_ENUM_DATA_MANAGER,
+//                                    MESSAGE_OBJECT_ENUM_AUDIO_DECODER,
+//                                    MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF,
+//                                    Any());
 
                         PostMessage(MESSAGE_OBJECT_ENUM_DATA_MANAGER,
-                                    MESSAGE_OBJECT_ENUM_VIDEO_DECODER,
+                                    MESSAGE_OJBECT_ENUM_ALL,
                                     MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF,
                                     Any());
                         //std::cout << "endend==========================================endend" << std::endl;
-                        m_bRunning = false;
-                        continue;
+                        //m_bRunning = false;
+                        //continue;
+                        status = DATA_MANAGER_STATUS_ENUM_DEADED;
                     }
 
                     //CCFrequencyWorker::Wait();
@@ -267,12 +267,15 @@ void CCDataManager::Run()
                 //status = DATA_MANAGER_STATUS_ENUM_WORKING;
             }
             break;
-            case DATA_MANAGER_STATUS_ENUM_DEADING:
-            {
-            }
-            break;
             case DATA_MANAGER_STATUS_ENUM_DEADED:
             {
+                avformat_close_input(&pAVFormatContext);
+                
+                PostMessage(MESSAGE_OBJECT_ENUM_DATA_MANAGER,
+                            MESSAGE_OBJECT_ENUM_PLAYER,
+                            MESSAGE_OBJECT_ENUM_DATA_MANAGER_DEADED,
+                            Any());
+                
                 m_bRunning = false;
                 continue;
             }

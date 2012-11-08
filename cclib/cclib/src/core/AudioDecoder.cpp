@@ -203,13 +203,7 @@ void CCAudioDecoder::Run()
                 }// end not enough audio frame
                 else if(bDataManagerEof)//there is no data for data manager
                 {
-                    PostMessage(MESSAGE_OBJECT_ENUM_AUDIO_DECODER,
-                                MESSAGE_OBJECT_ENUM_AUDIO_RENDER,
-                                MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF,
-                                Any());
-                    m_bRunning = false;
-
-                    continue;
+                    status = AUDIO_DECODER_STATUS_ENUM_DEADED;
                 }else
                 {
                     usleep(10 * 1000);
@@ -225,15 +219,21 @@ void CCAudioDecoder::Run()
                 //Sleep(50);
             }
             break;
-            case AUDIO_DECODER_STATUS_ENUM_UNKNOW:
-            {
-
-            }
-            break;
             case AUDIO_DECODER_STATUS_ENUM_DEADED:
             {
+                //case some thing , I just dead , before this , I should tell the player
+                PostMessage(MESSAGE_OBJECT_ENUM_AUDIO_DECODER,
+                            MESSAGE_OBJECT_ENUM_PLAYER,
+                            MESSAGE_TYPE_ENUM_AUDIO_DECODER_DEADED,
+                            Any());
+                
                 m_bRunning = false;
                 continue;
+            }
+            break;
+            case AUDIO_DECODER_STATUS_ENUM_UNKNOW:
+            {
+                
             }
             break;
         }// end switch case

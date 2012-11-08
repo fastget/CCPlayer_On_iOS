@@ -23,10 +23,11 @@ public:
 
 public:
     void Play();
+    int64_t GetReadPlayedTime();
 
 private:
 	void Create(const std::string &deviceName);
-
+    
 private:
 	ALenum m_audChannels;
 	ALenum m_audFormat;

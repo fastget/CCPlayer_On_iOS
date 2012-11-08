@@ -37,6 +37,13 @@
 		5E5FA1821648F573004BB07D /* CCRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E5FA1781648F573004BB07D /* CCRootViewController.m */; };
 		5E5FA1861648F573004BB07D /* PlayerAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5E5FA17D1648F573004BB07D /* PlayerAdapter.mm */; };
 		5ED70DE71649678C00AD3195 /* libcclib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7910771649235D00168F5F /* libcclib.a */; };
+		5EE5650E164AB814009E8E89 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE56509164AB814009E8E89 /* libavcodec.a */; };
+		5EE5650F164AB814009E8E89 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650A164AB814009E8E89 /* libavdevice.a */; };
+		5EE56510164AB814009E8E89 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650B164AB814009E8E89 /* libavformat.a */; };
+		5EE56511164AB814009E8E89 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650C164AB814009E8E89 /* libavutil.a */; };
+		5EE56512164AB814009E8E89 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650D164AB814009E8E89 /* libswscale.a */; };
+		5EE56550164ABA78009E8E89 /* return_holdover.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EE5654E164ABA78009E8E89 /* return_holdover.png */; };
+		5EE56551164ABA78009E8E89 /* return_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EE5654F164ABA78009E8E89 /* return_normal.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +99,13 @@
 		5E5FA17C1648F573004BB07D /* PlayerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerAdapter.h; sourceTree = "<group>"; };
 		5E5FA17D1648F573004BB07D /* PlayerAdapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlayerAdapter.mm; sourceTree = "<group>"; };
 		5E5FA17E1648F573004BB07D /* PlayerAdapterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerAdapterProtocol.h; sourceTree = "<group>"; };
+		5EE56509164AB814009E8E89 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../ffmpeg/libs/simulater/libavcodec.a; sourceTree = "<group>"; };
+		5EE5650A164AB814009E8E89 /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = ../ffmpeg/libs/simulater/libavdevice.a; sourceTree = "<group>"; };
+		5EE5650B164AB814009E8E89 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeg/libs/simulater/libavformat.a; sourceTree = "<group>"; };
+		5EE5650C164AB814009E8E89 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../ffmpeg/libs/simulater/libavutil.a; sourceTree = "<group>"; };
+		5EE5650D164AB814009E8E89 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ../ffmpeg/libs/simulater/libswscale.a; sourceTree = "<group>"; };
+		5EE5654E164ABA78009E8E89 /* return_holdover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = return_holdover.png; path = DecorateImges/return_holdover.png; sourceTree = "<group>"; };
+		5EE5654F164ABA78009E8E89 /* return_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = return_normal.png; path = DecorateImges/return_normal.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +122,11 @@
 				5E5FA1571648F4FD004BB07D /* UIKit.framework in Frameworks */,
 				5E5FA1591648F4FD004BB07D /* Foundation.framework in Frameworks */,
 				5E5FA15B1648F4FD004BB07D /* CoreGraphics.framework in Frameworks */,
+				5EE5650E164AB814009E8E89 /* libavcodec.a in Frameworks */,
+				5EE5650F164AB814009E8E89 /* libavdevice.a in Frameworks */,
+				5EE56510164AB814009E8E89 /* libavformat.a in Frameworks */,
+				5EE56511164AB814009E8E89 /* libavutil.a in Frameworks */,
+				5EE56512164AB814009E8E89 /* libswscale.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +192,8 @@
 		5E1C3C83164A951B005F6917 /* DecorateImages */ = {
 			isa = PBXGroup;
 			children = (
+				5EE5654E164ABA78009E8E89 /* return_holdover.png */,
+				5EE5654F164ABA78009E8E89 /* return_normal.png */,
 				5E1C3C97164A9F3E005F6917 /* footer_bg_left.png */,
 				5E1C3C99164A9F3F005F6917 /* footer_bg_right.png */,
 				5E1C3C91164A9D41005F6917 /* header_bg_left.png */,
@@ -219,6 +240,11 @@
 		5E5FA1551648F4FD004BB07D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5EE56509164AB814009E8E89 /* libavcodec.a */,
+				5EE5650A164AB814009E8E89 /* libavdevice.a */,
+				5EE5650B164AB814009E8E89 /* libavformat.a */,
+				5EE5650C164AB814009E8E89 /* libavutil.a */,
+				5EE5650D164AB814009E8E89 /* libswscale.a */,
 				5E5482371648FAB400BD080D /* cclib.xcodeproj */,
 				5E5482921648FDF400BD080D /* libz.1.2.5.dylib */,
 				5E5482901648FDEA00BD080D /* libbz2.1.0.dylib */,
@@ -346,6 +372,8 @@
 				5E1C3C96164A9D41005F6917 /* header_bg_right.png in Resources */,
 				5E1C3C9A164A9F3F005F6917 /* footer_bg_left.png in Resources */,
 				5E1C3C9C164A9F3F005F6917 /* footer_bg_right.png in Resources */,
+				5EE56550164ABA78009E8E89 /* return_holdover.png in Resources */,
+				5EE56551164ABA78009E8E89 /* return_normal.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

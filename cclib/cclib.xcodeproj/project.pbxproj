@@ -19,13 +19,11 @@
 		5E1C3C49164A2DE0005F6917 /* VideoRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E1C3C44164A2DE0005F6917 /* VideoRender.cpp */; };
 		5E5482711648FAD000BD080D /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E5482611648FAD000BD080D /* Player.cpp */; };
 		5E5482771648FAD000BD080D /* ALWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E5482691648FAD000BD080D /* ALWrapper.cpp */; };
-		5E5482781648FAD000BD080D /* FrequencyWorker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826A1648FAD000BD080D /* FrequencyWorker.cpp */; };
 		5E5482791648FAD000BD080D /* GLWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826B1648FAD000BD080D /* GLWrapper.cpp */; };
 		5E54827A1648FAD000BD080D /* MessageCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826C1648FAD000BD080D /* MessageCenter.cpp */; };
 		5E54827B1648FAD000BD080D /* ModuleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826D1648FAD000BD080D /* ModuleManager.cpp */; };
 		5E54827C1648FAD000BD080D /* SystemClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826E1648FAD000BD080D /* SystemClock.cpp */; };
 		5E54827D1648FAD000BD080D /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826F1648FAD000BD080D /* Thread.cpp */; };
-		5E54827E1648FAD000BD080D /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E5482701648FAD000BD080D /* Timer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,28 +62,23 @@
 		5E5482501648FAD000BD080D /* AudioDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDef.h; sourceTree = "<group>"; };
 		5E5482511648FAD000BD080D /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		5E5482521648FAD000BD080D /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		5E5482531648FAD000BD080D /* FrequencyWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrequencyWorker.h; sourceTree = "<group>"; };
 		5E5482541648FAD000BD080D /* GLWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLWrapper.h; sourceTree = "<group>"; };
 		5E5482551648FAD000BD080D /* IMessageReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMessageReceiver.h; sourceTree = "<group>"; };
 		5E5482561648FAD000BD080D /* MessageCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCenter.h; sourceTree = "<group>"; };
 		5E5482571648FAD000BD080D /* ModuleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModuleManager.h; sourceTree = "<group>"; };
-		5E5482581648FAD000BD080D /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
 		5E5482591648FAD000BD080D /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
 		5E54825A1648FAD000BD080D /* SmartPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartPtr.h; sourceTree = "<group>"; };
 		5E54825B1648FAD000BD080D /* SpinLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinLock.h; sourceTree = "<group>"; };
 		5E54825C1648FAD000BD080D /* SystemClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemClock.h; sourceTree = "<group>"; };
 		5E54825D1648FAD000BD080D /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
-		5E54825E1648FAD000BD080D /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		5E54825F1648FAD000BD080D /* VideoDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDef.h; sourceTree = "<group>"; };
 		5E5482611648FAD000BD080D /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		5E5482691648FAD000BD080D /* ALWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALWrapper.cpp; sourceTree = "<group>"; };
-		5E54826A1648FAD000BD080D /* FrequencyWorker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrequencyWorker.cpp; sourceTree = "<group>"; };
 		5E54826B1648FAD000BD080D /* GLWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLWrapper.cpp; sourceTree = "<group>"; };
 		5E54826C1648FAD000BD080D /* MessageCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageCenter.cpp; sourceTree = "<group>"; };
 		5E54826D1648FAD000BD080D /* ModuleManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModuleManager.cpp; sourceTree = "<group>"; };
 		5E54826E1648FAD000BD080D /* SystemClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemClock.cpp; sourceTree = "<group>"; };
 		5E54826F1648FAD000BD080D /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
-		5E5482701648FAD000BD080D /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		5E5FA1931648F61E004BB07D /* libcclib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcclib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -147,18 +140,15 @@
 				5E5482501648FAD000BD080D /* AudioDef.h */,
 				5E5482511648FAD000BD080D /* Common.h */,
 				5E5482521648FAD000BD080D /* Event.h */,
-				5E5482531648FAD000BD080D /* FrequencyWorker.h */,
 				5E5482541648FAD000BD080D /* GLWrapper.h */,
 				5E5482551648FAD000BD080D /* IMessageReceiver.h */,
 				5E5482561648FAD000BD080D /* MessageCenter.h */,
 				5E5482571648FAD000BD080D /* ModuleManager.h */,
-				5E5482581648FAD000BD080D /* Mutex.h */,
 				5E5482591648FAD000BD080D /* RWLock.h */,
 				5E54825A1648FAD000BD080D /* SmartPtr.h */,
 				5E54825B1648FAD000BD080D /* SpinLock.h */,
 				5E54825C1648FAD000BD080D /* SystemClock.h */,
 				5E54825D1648FAD000BD080D /* Thread.h */,
-				5E54825E1648FAD000BD080D /* Timer.h */,
 				5E54825F1648FAD000BD080D /* VideoDef.h */,
 			);
 			path = common;
@@ -191,13 +181,11 @@
 			isa = PBXGroup;
 			children = (
 				5E5482691648FAD000BD080D /* ALWrapper.cpp */,
-				5E54826A1648FAD000BD080D /* FrequencyWorker.cpp */,
 				5E54826B1648FAD000BD080D /* GLWrapper.cpp */,
 				5E54826C1648FAD000BD080D /* MessageCenter.cpp */,
 				5E54826D1648FAD000BD080D /* ModuleManager.cpp */,
 				5E54826E1648FAD000BD080D /* SystemClock.cpp */,
 				5E54826F1648FAD000BD080D /* Thread.cpp */,
-				5E5482701648FAD000BD080D /* Timer.cpp */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -284,13 +272,11 @@
 			files = (
 				5E5482711648FAD000BD080D /* Player.cpp in Sources */,
 				5E5482771648FAD000BD080D /* ALWrapper.cpp in Sources */,
-				5E5482781648FAD000BD080D /* FrequencyWorker.cpp in Sources */,
 				5E5482791648FAD000BD080D /* GLWrapper.cpp in Sources */,
 				5E54827A1648FAD000BD080D /* MessageCenter.cpp in Sources */,
 				5E54827B1648FAD000BD080D /* ModuleManager.cpp in Sources */,
 				5E54827C1648FAD000BD080D /* SystemClock.cpp in Sources */,
 				5E54827D1648FAD000BD080D /* Thread.cpp in Sources */,
-				5E54827E1648FAD000BD080D /* Timer.cpp in Sources */,
 				5E1C3C45164A2DE0005F6917 /* AudioDecoder.cpp in Sources */,
 				5E1C3C46164A2DE0005F6917 /* AudioRender.cpp in Sources */,
 				5E1C3C47164A2DE0005F6917 /* DataManager.cpp in Sources */,

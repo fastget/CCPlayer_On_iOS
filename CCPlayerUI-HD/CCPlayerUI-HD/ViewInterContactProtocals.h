@@ -9,13 +9,13 @@
 //this is the mask view protocals
 @protocol CCMaskViewToViewControllerDelegate <NSObject>
 @required
-
+- (void)twoFingersTapTwice;
 @end
 
 //this is the header view protocals
 @protocol CCHeaderViewToViewControllerDelegate <NSObject>
 @required
-
+- (void)backButtonPressed;
 
 @end
 

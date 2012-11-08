@@ -48,6 +48,9 @@ private:
 
 public:
     virtual void Run();
+    
+private:
+    void DestructPlayerSystem();
 
 private:
     std::queue<SmartPtr<Event> > m_messageQueue;

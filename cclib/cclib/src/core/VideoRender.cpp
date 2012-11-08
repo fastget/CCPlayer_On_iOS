@@ -137,11 +137,13 @@ void CCVideoRender::Run()
                                             m_videoFrameQueue.front();
 
                     // div it with 1000.0 to prevent the number is to large
-                    double currTime = av_gettime() / 1000.0;
+                    //double currTime = av_gettime() / 1000.0;
                     //std::cout << " the show time is:" << (int64_t)shrdVideoFrame.GetPtr()->GetShowTime() << std::endl;
                     //std::cout << " the curr time is:=====" << (int64_t)currTime << std::endl;
 
-                    if(shrdVideoFrame.GetPtr()->GetShowTime() < currTime)
+                    //if(shrdVideoFrame.GetPtr()->GetShowTime() < currTime)
+                    if (CCSystemClock::GetInstance()->GetVideoStartRender()
+                        && shrdVideoFrame.GetPtr()->GetShowTime() < CCSystemClock::GetInstance()->GetRealPlayedTime())
                     {
                         //std::cout << " the show time is:" << (int64_t)shrdVideoFrame.GetPtr()->GetShowTime() << std::endl;
                         //std::cout << " the curr time is:=====" << (int64_t)currTime << std::endl;
@@ -161,12 +163,7 @@ void CCVideoRender::Run()
                     } // end of if get show time
                 }else if(bDataManagerEof)
                 {
-                    PostMessage(MESSAGE_OBJECT_ENUM_VIDEO_RENDER,
-                                MESSAGE_OBJECT_ENUM_PLAYER,
-                                MESSAGE_TYPE_ENUM_VIDEO_DEADED,
-                                Any());
-                    m_bRunning = false;
-                    continue;
+                    status = VIDEO_RENDER_STATUS_ENUM_DEADED;
                 }
 
 //                CCFrequencyWorker::Wait();
@@ -185,6 +182,10 @@ void CCVideoRender::Run()
             break;
             case VIDEO_RENDER_STATUS_ENUM_DEADED:
             {
+                PostMessage(MESSAGE_OBJECT_ENUM_VIDEO_RENDER,
+                            MESSAGE_OBJECT_ENUM_PLAYER,
+                            MESSAGE_TYPE_ENUM_VIDEO_RENDER_DEADED,
+                            Any());
                 m_bRunning = false;
                 continue;
             }
@@ -192,6 +193,7 @@ void CCVideoRender::Run()
         } // end of the render status
     }
 
+    glWrapper.ClearGLRenderView();
     std::cout << "The vide render is deaded" << std::endl;
 
     //CCSystemClock::GetInstance()->UnRegisterSystemAlarm(this);

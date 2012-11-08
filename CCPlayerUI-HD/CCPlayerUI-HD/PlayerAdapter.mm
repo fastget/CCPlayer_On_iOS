@@ -20,6 +20,8 @@ CCPlayerViewAdapter::~CCPlayerViewAdapter()
     this->delegate = nil;
 }
 
+#pragma --mark "this will called by player view controller"
+
 int CCPlayerViewAdapter::Open(NSString* mediaPath)
 {
     const char* szMediaPath = [mediaPath UTF8String];
@@ -35,6 +37,7 @@ int CCPlayerViewAdapter::Pause()
 
 int CCPlayerViewAdapter::Stop()
 {
+    m_pPlayerInstance->Stop();
     return 0;
 }
 
@@ -53,14 +56,29 @@ void CCPlayerViewAdapter::SetGLRenderView()
     m_pPlayerInstance->SetGLRenderView(this);
 }
 
-void CCPlayerViewAdapter::OnCmmandOpen(int ErrCode)
+#pragma --mark "this is the callback functions by cclib"
+
+void CCPlayerViewAdapter::OnCommandOpen(int ErrCode)
 {
     if (delegate != nil
-        && [delegate respondsToSelector:@selector(onCmmandOpen:)])
+        && [delegate respondsToSelector:@selector(onCommandOpen:)])
     {
         NSMutableArray* param = [[NSMutableArray alloc] init];
         [param addObject:[NSNumber numberWithInt:ErrCode]];
-        [delegate performSelectorOnMainThread:@selector(onCmmandOpen:)
+        [delegate performSelectorOnMainThread:@selector(onCommandOpen:)
+                                   withObject:param
+                                waitUntilDone:NO];
+    }
+}
+
+void CCPlayerViewAdapter::OnCommandStop(int ErrCode)
+{
+    if (delegate != nil
+        && [delegate respondsToSelector:@selector(onCommandStop:)])
+    {
+        NSMutableArray* param = [[NSMutableArray alloc] init];
+        [param addObject:[NSNumber numberWithInt:ErrCode]];
+        [delegate performSelectorOnMainThread:@selector(onCommandStop:)
                                    withObject:param
                                 waitUntilDone:NO];
     }

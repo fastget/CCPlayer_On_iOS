@@ -36,7 +36,8 @@ public:
     void SetGLRenderView();
     
 public:
-    virtual void OnCmmandOpen(int ErrCode);
+    virtual void OnCommandOpen(int ErrCode);
+    virtual void OnCommandStop(int ErrCode);
     
 public:
     virtual int GetRenderViewRect(int* x, int* y, int* width, int* height);

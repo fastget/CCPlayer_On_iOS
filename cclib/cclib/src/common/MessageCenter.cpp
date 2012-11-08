@@ -19,6 +19,11 @@ CCMessageCenter* CCMessageCenter::GetInstance()
 
 void CCMessageCenter::DestoryInstance()
 {
+    m_pSharedInstance->m_bRunning = false;
+    
+    //just wait the message center deaded
+    pthread_join(m_pSharedInstance->m_threadId, NULL);
+    
     if (m_pSharedInstance != NULL)
     {
         delete m_pSharedInstance;
@@ -100,10 +105,15 @@ void CCMessageCenter::NotifyToAllMessageObject(const SmartPtr<Event>& rSmtEvent)
 
     while(cit != m_mapMessageReceiver.end())
     {
-        SmartPtr<Event> shdEvent = rSmtEvent;
-        rSmtEvent.GetPtr()->pReceiveModule = cit->second;
-        cit->second->ReceiverMessage(rSmtEvent);
-
+        //发送除自己以外的所有消息对象。
+        if (rSmtEvent.GetPtr()->pSendModule != cit->second)
+        {
+            SmartPtr<Event> shdEvent = rSmtEvent;
+            rSmtEvent.GetPtr()->pReceiveModule = cit->second;
+            cit->second->ReceiverMessage(rSmtEvent);
+            
+            printf("the receive id is : %d\n",cit->first);
+        }
         cit ++;
     }
 

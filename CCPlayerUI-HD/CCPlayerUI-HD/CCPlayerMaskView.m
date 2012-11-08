@@ -8,24 +8,38 @@
 
 #import "CCPlayerMaskView.h"
 
+@interface CCPlayerMaskView ()
+{
+    UITapGestureRecognizer*     _twoFingersTapTwice;
+}
+
+@end
+
 @implementation CCPlayerMaskView
+
+@synthesize delegate = _delegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        _twoFingersTapTwice = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTapTwice:)];
+        [_twoFingersTapTwice setNumberOfTapsRequired:2];
+        [_twoFingersTapTwice setNumberOfTouchesRequired:1];
+        
+        [self addGestureRecognizer:_twoFingersTapTwice];
     }
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)twoFingersTapTwice:(UITapGestureRecognizer *)recognizer
 {
-    // Drawing code
+    if (_delegate != nil
+        && [_delegate respondsToSelector:@selector(twoFingersTapTwice)])
+    {
+        [_delegate twoFingersTapTwice];
+    }
 }
-*/
 
 @end

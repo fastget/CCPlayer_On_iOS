@@ -17,6 +17,8 @@
 
 @implementation CCPlayerFooterView
 
+@synthesize delegate = _delegate;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
