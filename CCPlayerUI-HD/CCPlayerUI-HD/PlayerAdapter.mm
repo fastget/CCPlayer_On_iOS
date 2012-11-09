@@ -32,6 +32,7 @@ int CCPlayerViewAdapter::Open(NSString* mediaPath)
 
 int CCPlayerViewAdapter::Pause()
 {
+    m_pPlayerInstance->Pause();
     return 0;
 }
 
@@ -48,7 +49,13 @@ int CCPlayerViewAdapter::Seek(int64_t posInSecond)
 
 int CCPlayerViewAdapter::Continue()
 {
+    m_pPlayerInstance->Continue();
     return 0;
+}
+
+void CCPlayerViewAdapter::SetVolume(float volume)
+{
+    m_pPlayerInstance->SetVolume(volume);
 }
 
 void CCPlayerViewAdapter::SetGLRenderView()

@@ -42,6 +42,14 @@ void CCPlayer::SetGLRenderView(IGLView* pIGLRenderView)
                                                 MESSAGE_TYPE_ENUM_INIT_GLRENDER_OBJECT,
                                                 Any(pIGLRenderView));
 }
+    
+void CCPlayer::SetVolume(float volume)
+{
+    CCMessageCenter::GetInstance()->PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
+                                                MESSAGE_OBJECT_ENUM_AUDIO_RENDER,
+                                                MESSAGE_TYPE_ENUM_SET_VOLUME,
+                                                Any(volume));
+}
 
 void CCPlayer::Open(const std::string& loadParams)
 {

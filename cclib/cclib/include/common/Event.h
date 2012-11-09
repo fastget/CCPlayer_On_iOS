@@ -17,6 +17,7 @@ enum MessageType
     COMMAND_TYPE_ENUM_STOP,
 
     MESSAGE_TYPE_ENUM_INIT_GLRENDER_OBJECT,
+    MESSAGE_TYPE_ENUM_SET_VOLUME,
 
 //this is for player control the all modules
     MESSAGE_TYPE_ENUM_OPEN_FILE,

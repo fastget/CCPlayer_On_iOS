@@ -7,25 +7,34 @@
 //
 
 #import "CCPlayerViewController.h"
-#import "CCPlayerHeaderView.h"
-#import "CCPlayerMaskView.h"
-#import "CCPlayerFooterView.h"
 #import "CCPlayerRenderView.h"
 #import "PlayerAdapter.h"
 
-#define PLAYER_HEADER_VIEW_HEIGHT   80
-#define PLAYER_FOOTER_VIEW_HEIGHT   100
+#import "CCMaskViewController.h"
+#import "CCHeaderViewController.h"
+#import "CCFooterViewController.h"
+#import "CCVolumeViewController.h"
+
+#define MASK_VIEW_XIB_NAME      @"CCMaskViewController"
+#define HEADER_VIEW_XIB_NAME    @"CCHeaderViewController"
+#define FOOTER_VIEW_XIB_NAME    @"CCFooterViewController"
+#define VOLUME_VIEW_XIB_NAME    @"CCVolumeViewController"
+
+#define VOLUME_VIEW_SPAN    20
 
 @interface CCPlayerViewController ()
 {
     //this is a C++ object
-    CCPlayerViewAdapter*    _playerViewAdapter;
+    CCPlayerViewAdapter*    m_pPlayerAdapter;
     
     //this is a oc object
     CCPlayerRenderView*     _playerRenderView;
-    CCPlayerMaskView*       _playerMaskView;
-    CCPlayerHeaderView*     _playerHeaderView;
-    CCPlayerFooterView*     _playerFooterView;
+    
+    //this is the controllers
+    CCMaskViewController*       _maskViewController;
+    CCHeaderViewController*     _headerViewController;
+    CCFooterViewController*     _footerViewController;
+    CCVolumeViewController*     _volumeViewController;
 }
 
 @end
@@ -51,50 +60,81 @@
     
     // Custom initialization
     //create the C++ object
-    _playerViewAdapter = new CCPlayerViewAdapter(self);
+    m_pPlayerAdapter = new CCPlayerViewAdapter(self);
     
     CGRect rectScreen = [[UIScreen mainScreen] bounds];
     
-    //pretend the views OrientationIsLandscape
     CGRect rectDisplay = CGRectMake(rectScreen.origin.x,
                                     rectScreen.origin.y,
                                     rectScreen.size.height,
                                     rectScreen.size.width);
-    CGRect rectMask = CGRectMake(rectScreen.origin.x,
-                                    rectScreen.origin.y,
-                                    rectScreen.size.height,
-                                 rectScreen.size.width);
-    CGRect rectHeader = CGRectMake(rectScreen.origin.x,
-                                   rectScreen.origin.y,
-                                   rectScreen.size.height,
-                                   PLAYER_HEADER_VIEW_HEIGHT);
-    CGRect rectFooter = CGRectMake(rectScreen.origin.x,
-                                   rectScreen.size.width - PLAYER_FOOTER_VIEW_HEIGHT,
-                                   rectScreen.size.height,
-                                   PLAYER_FOOTER_VIEW_HEIGHT);
-    
     _playerRenderView = [[CCPlayerRenderView alloc] initWithFrame:rectDisplay];
-    _playerMaskView = [[CCPlayerMaskView alloc] initWithFrame:rectMask];
-    _playerMaskView.backgroundColor = [UIColor clearColor];
-    _playerMaskView.delegate = self;
-    _playerHeaderView = [[CCPlayerHeaderView alloc] initWithFrame:rectHeader];
-    _playerHeaderView.backgroundColor = [UIColor clearColor];
-    _playerHeaderView.delegate = self;
-    _playerFooterView = [[CCPlayerFooterView alloc] initWithFrame:rectFooter];
-    _playerFooterView.backgroundColor = [UIColor clearColor];
-    _playerFooterView.delegate = self;
     
+    //add the render view to the object
     [self.view addSubview:_playerRenderView];
-    [self.view addSubview:_playerMaskView];
-    [self.view addSubview:_playerHeaderView];
-    [self.view addSubview:_playerFooterView];
+    
+    CGRect rectControls = [_playerRenderView bounds];
+    
+    _maskViewController = [[CCMaskViewController alloc] initWithNibName:MASK_VIEW_XIB_NAME bundle:nil];
+    CGPoint centerPointMaskView = CGPointMake(
+                                     rectControls.size.width / 2,
+                                     rectControls.size.height / 2);
+    _maskViewController.view.center = centerPointMaskView;
+    [self.view addSubview:_maskViewController.view];
+    _maskViewController.delegate = self;
+    
+    _headerViewController = [[CCHeaderViewController alloc] initWithNibName:HEADER_VIEW_XIB_NAME bundle:nil];
+    //adjust the header view postion in main screen
+    CGRect rectHeaderBounds = _headerViewController.view.bounds;
+    CGPoint centerPointHeaderView = CGPointMake(rectControls.size.width / 2,
+                                                rectHeaderBounds.size.height / 2);
+    _headerViewController.view.center = centerPointHeaderView;
+    [self.view addSubview:_headerViewController.view];
+    _headerViewController.delegate = self;
+    
+    _footerViewController = [[CCFooterViewController alloc] initWithNibName:FOOTER_VIEW_XIB_NAME bundle:nil];
+    //adjust the footer view postion in main screen
+    CGRect rectFooterBounds = _footerViewController.view.bounds;
+    CGPoint centerPointFooterView = CGPointMake(rectControls.size.width / 2,
+                                                rectControls.size.height - rectFooterBounds.size.height / 2);
+    _footerViewController.view.center = centerPointFooterView;
+    [self.view addSubview:_footerViewController.view];
+    _footerViewController.delegate = self;
+    
+    _volumeViewController = [[CCVolumeViewController alloc] initWithNibName:VOLUME_VIEW_XIB_NAME bundle:nil];
+    //adjust the volume view postion in main screen
+    CGRect rectVolumeBounds = _volumeViewController.view.bounds;
+    CGPoint centerVolumePoint = CGPointMake(rectControls.size.width - VOLUME_VIEW_SPAN,
+                                            (rectControls.size.height - rectVolumeBounds.size.height) / 2);
+    
+    
+    _volumeViewController.view.center = centerVolumePoint;
+    [self.view addSubview:_volumeViewController.view];
+    _volumeViewController.delegate = self;
     
     NSString* medaiPath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"flv"];
-    _playerHeaderView.textViewTitle.text = @"扔掉假睫毛";
+//    _playerHeaderView.textViewTitle.text = @"扔掉假睫毛";
     
     NSLog(@"The mediaPath is : %@", medaiPath);
     
-    _playerViewAdapter->Open(medaiPath);
+    m_pPlayerAdapter->Open(medaiPath);
+}
+
+- (void)viewDidUnload
+{
+    //clean up the C++ object
+    if (m_pPlayerAdapter != NULL)
+    {
+        delete m_pPlayerAdapter;
+        m_pPlayerAdapter = NULL;
+    }
+    
+    //clean up the oc object
+    _playerRenderView = nil;
+    _maskViewController = nil;
+    _headerViewController = nil;
+    _footerViewController = nil;
+    _volumeViewController = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -108,39 +148,15 @@
     return UIInterfaceOrientationIsLandscape(toInterfaceOrientation);
 }
 
-- (void)layoutSubviews
-{
-}
-
-- (void)dealloc
-{
-    if (_playerRenderView != nil)
-    {
-        _playerRenderView = nil;
-    }
-    
-    if (_playerViewAdapter != NULL)
-    {
-        delete _playerViewAdapter;
-        _playerViewAdapter = NULL;
-    }
-}
-
-
 #pragma --mark "cc player callbacks"
 - (void)onCommandOpen:(NSArray*)errCode
 {
-    _playerViewAdapter->SetGLRenderView();
+    m_pPlayerAdapter->SetGLRenderView();
+    m_pPlayerAdapter->SetVolume(0.5);
 }
 
 - (void)onCommandStop:(NSArray*)errCode
 {
-    if (_playerViewAdapter != NULL)
-    {
-        delete _playerViewAdapter;
-        _playerViewAdapter = NULL;
-    }
-    
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -170,15 +186,32 @@
 
 #pragma --mark "player user actions"
 
+- (void)playButtonPressed
+{
+    //the movie auto play by the default , so do this , just continue play
+    m_pPlayerAdapter->Continue();
+}
+
+- (void)pauseButtonPressed
+{
+    m_pPlayerAdapter->Pause();
+}
+
 - (void)backButtonPressed
 {
-    _playerViewAdapter->Stop();
+    m_pPlayerAdapter->Stop();
+}
+
+- (void)setVolume:(float)volume
+{
+    m_pPlayerAdapter->SetVolume(volume);
 }
 
 - (void)twoFingersTapTwice
 {
-    _playerHeaderView.hidden = !_playerHeaderView.hidden;
-    _playerFooterView.hidden = !_playerFooterView.hidden;
+    _headerViewController.view.hidden = !_headerViewController.view.hidden;
+    _footerViewController.view.hidden = !_footerViewController.view.hidden;
+    _volumeViewController.view.hidden = !_volumeViewController.view.hidden;
 }
 
 @end

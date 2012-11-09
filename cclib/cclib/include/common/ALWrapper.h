@@ -20,6 +20,7 @@ public:
     void InitAudioFrame(AudioFrame* pAudioFrame, int index);
     bool NeedData();
     void UpdateAudioFrame(AudioFrame* pAudioFrame);
+    void SetVolume(float volume);
 
 public:
     void Play();

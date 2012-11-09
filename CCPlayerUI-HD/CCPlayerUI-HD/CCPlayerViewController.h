@@ -14,6 +14,7 @@
 @interface CCPlayerViewController : UIViewController <PlayerDelegate,
                                                       CCMaskViewToViewControllerDelegate,
                                                       CCHeaderViewToViewControllerDelegate,
-                                                      CCFooterViewToViewControllerDelegate>
+                                                      CCFooterViewToViewControllerDelegate,
+                                                      CCVolumeViewToViewControllerDelegate>
 
 @end

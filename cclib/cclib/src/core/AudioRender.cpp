@@ -97,6 +97,12 @@ void CCAudioRender::Run()
                     m_audioFrameQueue.push(shrdAudioFrame);
                 }
                 break;
+                case MESSAGE_TYPE_ENUM_SET_VOLUME:
+                {
+                    float volume = any_cast<float>(event.GetPtr()->anyParams);
+                    alWrapper.SetVolume(volume);
+                }
+                break;
                 case MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF:
                 {
                     bDataManagerEof = true;

@@ -1,18 +1,16 @@
 //
-//  CCPlayerHeaderView.h
+//  CCHeaderViewController.h
 //  CCPlayerUI-HD
 //
-//  Created by maclion on 11/7/12.
+//  Created by maclion on 11/8/12.
 //  Copyright (c) 2012 cc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-
 #import "ViewInterContactProtocals.h"
 
-@interface CCPlayerHeaderView : UIView
+@interface CCHeaderViewController : UIViewController
 
 @property (strong, nonatomic) NSObject<CCHeaderViewToViewControllerDelegate>* delegate;
-@property (strong, nonatomic) UITextView* textViewTitle;
 
 @end

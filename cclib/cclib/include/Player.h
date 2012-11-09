@@ -29,6 +29,7 @@ public:
 
 public:
     void SetGLRenderView(IGLView* pIGLRenderView);
+    void SetVolume(float volume);
     
 public:
     //get total display time

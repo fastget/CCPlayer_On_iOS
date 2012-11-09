@@ -22,5 +22,12 @@
 //this is the footer view protocals
 @protocol CCFooterViewToViewControllerDelegate <NSObject>
 @required
+- (void)playButtonPressed;
+- (void)pauseButtonPressed;
+@end
 
+//this is the volume view protocals
+@protocol CCVolumeViewToViewControllerDelegate <NSObject>
+@required
+- (void)setVolume:(float)volume;
 @end

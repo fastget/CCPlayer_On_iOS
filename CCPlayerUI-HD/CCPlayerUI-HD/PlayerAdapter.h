@@ -33,6 +33,9 @@ public:
     int Continue();
     
 public:
+    void SetVolume(float volume);
+    
+public:
     void SetGLRenderView();
     
 public:
