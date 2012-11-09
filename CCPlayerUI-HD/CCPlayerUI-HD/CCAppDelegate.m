@@ -7,12 +7,24 @@
 //
 
 #import "CCAppDelegate.h"
+#import "CCRootViewController.h"
+
+#define ROOT_VIEW_XIB_NAME  @"CCRootViewController"
 
 @implementation CCAppDelegate
+
+@synthesize window = _window;
+@synthesize rootViewController = _rootViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    _rootViewController = [[CCRootViewController alloc] initWithNibName:ROOT_VIEW_XIB_NAME bundle:nil];
+    _window.rootViewController = _rootViewController;
+    [_window makeKeyAndVisible];
     return YES;
 }
 							

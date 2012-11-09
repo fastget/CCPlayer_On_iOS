@@ -31,8 +31,6 @@
 		5E1C3C81164A950E005F6917 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1C3C7D164A950E005F6917 /* Default@2x.png */; };
 		5E1C3C82164A950E005F6917 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E1C3C7E164A950E005F6917 /* icon.png */; };
 		5E1C3C86164A954C005F6917 /* test.flv in Resources */ = {isa = PBXBuildFile; fileRef = 5E1C3C85164A954C005F6917 /* test.flv */; };
-		5E1C3C89164A95BB005F6917 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E1C3C87164A95BB005F6917 /* MainStoryboard.storyboard */; };
-		5E1C3C8D164A95D5005F6917 /* CCPlayerUI-HD-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5E1C3C8B164A95D5005F6917 /* CCPlayerUI-HD-Info.plist */; };
 		5E1C3C90164A95F2005F6917 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5E1C3C8E164A95F2005F6917 /* InfoPlist.strings */; };
 		5E5482811648FD9100BD080D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E5482801648FD9100BD080D /* OpenAL.framework */; };
 		5E5482831648FD9800BD080D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E5482821648FD9800BD080D /* OpenGLES.framework */; };
@@ -60,6 +58,8 @@
 		5EE56510164AB814009E8E89 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650B164AB814009E8E89 /* libavformat.a */; };
 		5EE56511164AB814009E8E89 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650C164AB814009E8E89 /* libavutil.a */; };
 		5EE56512164AB814009E8E89 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE5650D164AB814009E8E89 /* libswscale.a */; };
+		5EF9D8A1164D2DAD00A48331 /* CCRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EF9D8A0164D2DAD00A48331 /* CCRootViewController.xib */; };
+		5EF9D8A3164D333700A48331 /* CCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EF9D8A2164D333700A48331 /* CCPlayerViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,7 +98,6 @@
 		5E1C3C7D164A950E005F6917 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "ApplicationIcons/Default@2x.png"; sourceTree = "<group>"; };
 		5E1C3C7E164A950E005F6917 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ApplicationIcons/icon.png; sourceTree = "<group>"; };
 		5E1C3C85164A954C005F6917 /* test.flv */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.flv; path = MediaFiles/test.flv; sourceTree = "<group>"; };
-		5E1C3C88164A95BB005F6917 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = ApplicationInfos/en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		5E1C3C8B164A95D5005F6917 /* CCPlayerUI-HD-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CCPlayerUI-HD-Info.plist"; path = "ApplicationInfos/CCPlayerUI-HD-Info.plist"; sourceTree = "<group>"; };
 		5E1C3C8C164A95D5005F6917 /* CCPlayerUI-HD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CCPlayerUI-HD-Prefix.pch"; path = "ApplicationInfos/CCPlayerUI-HD-Prefix.pch"; sourceTree = "<group>"; };
 		5E1C3C8F164A95F2005F6917 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ApplicationInfos/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -139,6 +138,8 @@
 		5EE5650B164AB814009E8E89 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeg/libs/simulater/libavformat.a; sourceTree = "<group>"; };
 		5EE5650C164AB814009E8E89 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../ffmpeg/libs/simulater/libavutil.a; sourceTree = "<group>"; };
 		5EE5650D164AB814009E8E89 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ../ffmpeg/libs/simulater/libswscale.a; sourceTree = "<group>"; };
+		5EF9D8A0164D2DAD00A48331 /* CCRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCRootViewController.xib; sourceTree = "<group>"; };
+		5EF9D8A2164D333700A48331 /* CCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCPlayerViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,12 +207,13 @@
 			name = PlayerAdapter;
 			sourceTree = "<group>";
 		};
-		5E1C3C59164A6A62005F6917 /* Storyboards */ = {
+		5E1C3C59164A6A62005F6917 /* UIXibs */ = {
 			isa = PBXGroup;
 			children = (
-				5E1C3C87164A95BB005F6917 /* MainStoryboard.storyboard */,
+				5EF9D8A0164D2DAD00A48331 /* CCRootViewController.xib */,
+				5EF9D8A2164D333700A48331 /* CCPlayerViewController.xib */,
 			);
-			name = Storyboards;
+			name = UIXibs;
 			sourceTree = "<group>";
 		};
 		5E1C3C7A164A94FB005F6917 /* ApplicationIcons */ = {
@@ -308,10 +310,10 @@
 		5E5FA15C1648F4FD004BB07D /* CCPlayerUI-HD */ = {
 			isa = PBXGroup;
 			children = (
-				5E1C3C59164A6A62005F6917 /* Storyboards */,
+				5E1C3C59164A6A62005F6917 /* UIXibs */,
+				5E1C3C56164A691A005F6917 /* Controllers */,
 				5E1C3C58164A6A1F005F6917 /* PlayerAdapter */,
 				5E1C3C57164A69BF005F6917 /* PlayerUI */,
-				5E1C3C56164A691A005F6917 /* Controllers */,
 				5E5FA1651648F4FD004BB07D /* CCAppDelegate.h */,
 				5E5FA1661648F4FD004BB07D /* CCAppDelegate.m */,
 				5E5FA15D1648F4FD004BB07D /* Supporting Files */,
@@ -423,8 +425,6 @@
 				5E1C3C81164A950E005F6917 /* Default@2x.png in Resources */,
 				5E1C3C82164A950E005F6917 /* icon.png in Resources */,
 				5E1C3C86164A954C005F6917 /* test.flv in Resources */,
-				5E1C3C89164A95BB005F6917 /* MainStoryboard.storyboard in Resources */,
-				5E1C3C8D164A95D5005F6917 /* CCPlayerUI-HD-Info.plist in Resources */,
 				5E1C3C90164A95F2005F6917 /* InfoPlist.strings in Resources */,
 				5EA36D89164BC56300E9B368 /* CCMaskViewController.xib in Resources */,
 				5EA36D8F164BC5B700E9B368 /* CCHeaderViewController.xib in Resources */,
@@ -447,6 +447,8 @@
 				5E090610164C13AD00F12B9C /* previous_controller_normal.png in Resources */,
 				5E090629164C236500F12B9C /* CCVolumeViewController.xib in Resources */,
 				5EE10A8E164CC1FD00AC721D /* volume_background.png in Resources */,
+				5EF9D8A1164D2DAD00A48331 /* CCRootViewController.xib in Resources */,
+				5EF9D8A3164D333700A48331 /* CCPlayerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,14 +475,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		5E1C3C87164A95BB005F6917 /* MainStoryboard.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5E1C3C88164A95BB005F6917 /* en */,
-			);
-			name = MainStoryboard.storyboard;
-			sourceTree = "<group>";
-		};
 		5E1C3C8E164A95F2005F6917 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

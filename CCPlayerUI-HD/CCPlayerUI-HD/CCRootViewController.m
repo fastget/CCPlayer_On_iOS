@@ -7,20 +7,25 @@
 //
 
 #import "CCRootViewController.h"
+#import "CCPlayerViewController.h"
+
+#define PLAYER_VIEW_XIB_NAME    @"CCPlayerViewController"
 
 @interface CCRootViewController ()
+{
+    CCPlayerViewController*     _playerViewController;
+}
 
 @end
 
 @implementation CCRootViewController
 
--(id)initWithCoder:(NSCoder *)aDecoder {
-    
-    if(self = [super initWithCoder:aDecoder])
-    {
-        //add init code here .
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
     }
-    
     return self;
 }
 
@@ -36,10 +41,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSLog(@"Prepare change to second view");
-    NSLog(@"%@", [segue identifier]);
+- (IBAction)playMoviePressed:(id)sender {
+    
+    _playerViewController = [[CCPlayerViewController alloc] initWithNibName:PLAYER_VIEW_XIB_NAME bundle:nil];
+    [self presentModalViewController:_playerViewController animated:NO];
 }
+
 
 @end
