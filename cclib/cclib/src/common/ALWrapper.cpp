@@ -13,13 +13,13 @@ namespace CCPlayer
 #define	NUM_BUFFERS	6
 #define BUFFER_SIZE 4096
 
-ALWrapper::ALWrapper(const std::string &deviceName)
+CCALWrapper::CCALWrapper(const std::string &deviceName)
 {
 	//Create the audio context
 	Create(deviceName);
 }
 
-ALWrapper::~ALWrapper()
+CCALWrapper::~CCALWrapper()
 {
 	//close the al context
 	alcDestroyContext(m_audioContext);
@@ -28,14 +28,14 @@ ALWrapper::~ALWrapper()
 	alcCloseDevice(m_audioDevice);
 }
 
-void ALWrapper::SetAudioCtx(ALenum channels, ALuint rate, ALenum format)
+void CCALWrapper::SetAudioCtx(ALenum channels, ALuint rate, ALenum format)
 {
     m_audChannels = channels;
     m_audRate = rate;
     m_audFormat = format;
 }
 
-void ALWrapper::Create(const std::string &deviceName)
+void CCALWrapper::Create(const std::string &deviceName)
 {
 	// Wait for the audio decoder init
 	if(deviceName.empty())
@@ -82,7 +82,7 @@ void ALWrapper::Create(const std::string &deviceName)
     alSourcef(m_audSource, AL_GAIN, 0.0f);
 }
 
-void ALWrapper::InitAudioFrame(AudioFrame* pAudioFrame, int index)
+void CCALWrapper::InitAudioFrame(AudioFrame* pAudioFrame, int index)
 {
     alBufferData(m_audBuffers[index],
                  m_audFormat,
@@ -96,7 +96,7 @@ void ALWrapper::InitAudioFrame(AudioFrame* pAudioFrame, int index)
     }
 }
     
-int64_t ALWrapper::GetReadPlayedTime()
+int64_t CCALWrapper::GetReadPlayedTime()
 {
     ALint offset;
     alGetSourcei(m_audSource, AL_SAMPLE_OFFSET, &offset);
@@ -104,7 +104,7 @@ int64_t ALWrapper::GetReadPlayedTime()
     return timestamp;
 }
 
-bool ALWrapper::NeedData()
+bool CCALWrapper::NeedData()
 {
     //std::cout << "NeedData called" << std::endl;
     ALint processed = 0;
@@ -137,13 +137,14 @@ bool ALWrapper::NeedData()
     }
 }
     
-void ALWrapper::SetVolume(float volume)
+void CCALWrapper::SetVolume(float volume)
 {
     alSourcef(m_audSource, AL_GAIN, volume);
+    assert(alGetError() == AL_NO_ERROR);
 }
 
 
-void ALWrapper::UpdateAudioFrame(AudioFrame* pAudioFrame)
+void CCALWrapper::UpdateAudioFrame(AudioFrame* pAudioFrame)
 {
     ALuint updateBuffer = 0;
     alSourceUnqueueBuffers(m_audSource, 1, &updateBuffer);
@@ -161,7 +162,7 @@ void ALWrapper::UpdateAudioFrame(AudioFrame* pAudioFrame)
     }
 }
 
-void ALWrapper::Play()
+void CCALWrapper::Play()
 {
     ALint state = AL_SOURCE_STATE;
     alGetSourcei(m_audSource, AL_SOURCE_STATE, &state);

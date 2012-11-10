@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *prevButton;
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
+@property (weak, nonatomic) IBOutlet UILabel *indicationTimeLabel;
 
 - (void)changeButtonStatus:(BOOL)bPlay;
 
@@ -28,6 +29,7 @@
 @synthesize prevButton;
 @synthesize nextButton;
 @synthesize progressSlider;
+@synthesize indicationTimeLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -57,6 +59,7 @@
     [self setPrevButton:nil];
     [self setNextButton:nil];
     [self setProgressSlider:nil];
+    [self setIndicationTimeLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -95,6 +98,11 @@
 {
     playButton.hidden = !bPlay;
     pauseButton.hidden = bPlay;
+}
+
+
+- (void)setIndicationTimeValue:(NSString*)value{
+    indicationTimeLabel.text = value;
 }
 
 @end

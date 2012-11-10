@@ -13,4 +13,6 @@
 
 @property (strong, nonatomic) NSObject<CCFooterViewToViewControllerDelegate>* delegate;
 
+- (void)setIndicationTimeValue:(NSString*)value;
+
 @end

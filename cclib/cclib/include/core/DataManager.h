@@ -28,14 +28,8 @@ public:
     virtual void Run();
 
 private:
-    int OpenFile(const std::string& mediaUrl,
-                 AVFormatContext** ppFormatCtx,
-                 int* pASIndex,
-                 int* pVSIndex);
-
-private:
     std::queue<SmartPtr<Event> > m_messageQueue;
-    CCSpinLock m_spinLockMessageQueue;
+    //CCSpinLock m_spinLockMessageQueue;
 };
 
 }

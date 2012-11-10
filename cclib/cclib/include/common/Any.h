@@ -121,6 +121,9 @@ public:
 template<typename ValueType>
 ValueType* any_cast(Any * operand)
 {
+    printf("the left name is %s\n", operand->type().name());
+    printf("the right name is %s\n", typeid(ValueType).name());
+    
     if (operand && strcmp(operand->type().name(), typeid(ValueType).name()) == 0)
     {
         return &static_cast<Any::holder<ValueType> *>(operand->content)->held;

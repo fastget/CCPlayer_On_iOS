@@ -28,23 +28,8 @@ public:
     virtual void Run();
 
 private:
-    int GetCodecContext(AVFormatContext* pFormatCtx,
-                                        int streamIndex,
-                                        AVCodecContext** ppCodecContext,
-                                        AVRational* pAudioTimeBase);
-
-    int GetVideoInformation(AVCodecContext* pVideoCtx,
-                                        SwsContext** ppImageConvertCtx,
-                                        int *pImgWidth,
-                                        int *pImgHeight,
-                                        int *pImgBufferLen);
-
-private:
     std::queue<SmartPtr<Event> > m_messageQueue;
-    CCSpinLock m_spinLockMessageQueue;
-
-private:
-    std::queue<SmartPtr<CCPacket> > m_videoPacketQueue;
+    //CCSpinLock m_spinLockMessageQueue;
 };
 
 }

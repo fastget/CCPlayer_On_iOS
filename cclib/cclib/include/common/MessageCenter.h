@@ -62,7 +62,7 @@ public:
     static void DestoryInstance();
     
 private:
-    static CCSpinLock m_spinLockInstance;
+    //static CCSpinLock m_spinLockInstance;
     static CCMessageCenter* m_pSharedInstance;
 };
 

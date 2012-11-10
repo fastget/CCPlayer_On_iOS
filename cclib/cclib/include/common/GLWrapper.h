@@ -6,17 +6,16 @@
 namespace CCPlayer
 {
 
-class IGLView;
+class IPlayerDelegate;
 class VideoFrame;
 
 class CCGLWrapper
 {
 public:
-    CCGLWrapper();
+    CCGLWrapper(IPlayerDelegate* pIPlayerDelegate);
     virtual ~CCGLWrapper();
 
 public:
-    void SetIGLRenderView(IGLView* pGLRenderView);
     int ClearGLRenderView();
     int DrawFrame(VideoFrame* pVideoFrame, int width, int height);
 
@@ -34,7 +33,7 @@ private:
     bool m_bFirstTime;
     
 private:
-    IGLView* m_pIGLRenderView;
+    IPlayerDelegate* m_pIPlayerDelegate;
     
 //    GLuint m_glTexture;
     GLint m_positionSlot;

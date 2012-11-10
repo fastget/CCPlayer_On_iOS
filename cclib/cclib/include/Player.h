@@ -12,13 +12,13 @@
 namespace CCPlayer
 {
 
-class ICommandResponse;
-class IGLView;
+class IPlayerDelegate;
+class CCALWrapper;
 
 class CCPlayer : public CCThread, public IMessageReceiver//, public CCFrequencyWorker
 {
 public:
-    CCPlayer(ICommandResponse* pICommandResponse);
+    CCPlayer(IPlayerDelegate* pIPlayerDelegate);
     virtual ~CCPlayer();
 
 public:
@@ -28,7 +28,6 @@ public:
     void Stop();
 
 public:
-    void SetGLRenderView(IGLView* pIGLRenderView);
     void SetVolume(float volume);
     
 public:
@@ -46,6 +45,7 @@ public:
 
 private:
     int FindAudioDecoderContext(AVCodecContext** ppASDecoderCtx, AVFormatContext* pFormatCtx, int asIndex);
+    int OpenFile(const std::string& mediaUrl);
 
 public:
     virtual void Run();
@@ -55,13 +55,18 @@ private:
 
 private:
     std::queue<SmartPtr<Event> > m_messageQueue;
-    CCSpinLock m_spinLockMessageQueue;
+    //CCSpinLock m_spinLockMessageQueue;
 
 private:
     AVFormatContext* m_pAVFormatCtx;
 
 private:
-    ICommandResponse* m_pCommandResponseObject;
+    IPlayerDelegate* m_pIPlayerDelegate;
+
+private:
+    //this is just for change the volume before load data from the network
+    CCALWrapper* m_pALWrapper;
+    
 };
 
 }

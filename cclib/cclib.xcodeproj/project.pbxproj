@@ -24,6 +24,7 @@
 		5E54827B1648FAD000BD080D /* ModuleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826D1648FAD000BD080D /* ModuleManager.cpp */; };
 		5E54827C1648FAD000BD080D /* SystemClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826E1648FAD000BD080D /* SystemClock.cpp */; };
 		5E54827D1648FAD000BD080D /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E54826F1648FAD000BD080D /* Thread.cpp */; };
+		5ED9528F164D6098006E7946 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ED9528D164D6098006E7946 /* Common.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,8 +55,6 @@
 		5E1C3C42164A2DE0005F6917 /* DataManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataManager.cpp; path = cclib/src/core/DataManager.cpp; sourceTree = SOURCE_ROOT; };
 		5E1C3C43164A2DE0005F6917 /* VideoDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoDecoder.cpp; path = cclib/src/core/VideoDecoder.cpp; sourceTree = SOURCE_ROOT; };
 		5E1C3C44164A2DE0005F6917 /* VideoRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoRender.cpp; path = cclib/src/core/VideoRender.cpp; sourceTree = SOURCE_ROOT; };
-		5E5482441648FAD000BD080D /* ICommandResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICommandResponse.h; sourceTree = "<group>"; };
-		5E5482451648FAD000BD080D /* IGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLView.h; sourceTree = "<group>"; };
 		5E5482461648FAD000BD080D /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		5E54824E1648FAD000BD080D /* ALWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALWrapper.h; sourceTree = "<group>"; };
 		5E54824F1648FAD000BD080D /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
@@ -80,6 +79,8 @@
 		5E54826E1648FAD000BD080D /* SystemClock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemClock.cpp; sourceTree = "<group>"; };
 		5E54826F1648FAD000BD080D /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5E5FA1931648F61E004BB07D /* libcclib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcclib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5ED9528D164D6098006E7946 /* Common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cpp; sourceTree = "<group>"; };
+		5ED95291164D7AD6006E7946 /* IPlayerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPlayerDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,8 +111,7 @@
 		5E5482431648FAD000BD080D /* include */ = {
 			isa = PBXGroup;
 			children = (
-				5E5482441648FAD000BD080D /* ICommandResponse.h */,
-				5E5482451648FAD000BD080D /* IGLView.h */,
+				5ED95291164D7AD6006E7946 /* IPlayerDelegate.h */,
 				5E5482461648FAD000BD080D /* Player.h */,
 				5E5482471648FAD000BD080D /* core */,
 				5E54824D1648FAD000BD080D /* common */,
@@ -181,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				5E5482691648FAD000BD080D /* ALWrapper.cpp */,
+				5ED9528D164D6098006E7946 /* Common.cpp */,
 				5E54826B1648FAD000BD080D /* GLWrapper.cpp */,
 				5E54826C1648FAD000BD080D /* MessageCenter.cpp */,
 				5E54826D1648FAD000BD080D /* ModuleManager.cpp */,
@@ -282,6 +283,7 @@
 				5E1C3C47164A2DE0005F6917 /* DataManager.cpp in Sources */,
 				5E1C3C48164A2DE0005F6917 /* VideoDecoder.cpp in Sources */,
 				5E1C3C49164A2DE0005F6917 /* VideoRender.cpp in Sources */,
+				5ED9528F164D6098006E7946 /* Common.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,14 +30,8 @@ public:
     virtual void Run();
 
 private:
-    ALenum GetAudioFormat(CCChannels channels, CCType type);
-
-private:
-    std::queue<SmartPtr<AudioFrame> > m_audioFrameQueue;
-
-private:
     std::queue<SmartPtr<Event> > m_messageQueue;
-    CCSpinLock m_spinLockMessageQueue;
+    //CCSpinLock m_spinLockMessageQueue;
 };
 
 }

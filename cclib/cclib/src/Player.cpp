@@ -1,9 +1,10 @@
 #include "Player.h"
-#include "ICommandResponse.h"
 #include "MessageCenter.h"
 #include "ModuleManager.h"
 #include "Any.h"
 #include "SystemClock.h"
+#include "IPlayerDelegate.h"
+#include "ALWrapper.h"
 
 namespace CCPlayer
 {
@@ -13,11 +14,50 @@ namespace CCPlayer
 #define VIDEO_DECODER_DEADED    4
 #define DATA_MANAGER_DEADED     5
 #define ALL_MODULE_ARE_DEADED   (1 + 2 + 3 + 4 +5)
+
+//we just declare the global player context
+CCPlayerContext* g_pPlayerContext;
     
-CCPlayer::CCPlayer(ICommandResponse* pICommandResponse)
+static int ffmpegLockManager( void **mtx, enum AVLockOp op )
+{
+    switch( op )
+    {
+        case AV_LOCK_CREATE:
+        {
+            *mtx =(pthread_mutex_t*) malloc( sizeof(pthread_mutex_t) );
+                
+            if( !*mtx ) {
+                return 1;
+            }
+                
+            return !!pthread_mutex_init( (pthread_mutex_t*)*mtx, NULL );
+        }
+                
+        case AV_LOCK_OBTAIN:
+        {
+            return !!pthread_mutex_lock( (pthread_mutex_t*) *mtx );
+        }
+                
+        case AV_LOCK_RELEASE:
+        {
+            return !!pthread_mutex_unlock( (pthread_mutex_t*)*mtx );
+        }
+                
+        case AV_LOCK_DESTROY:
+        {
+            pthread_mutex_destroy( (pthread_mutex_t*)*mtx );
+            free( *mtx );
+            return 0;
+        }
+    }
+        
+    return 1;
+}
+    
+CCPlayer::CCPlayer(IPlayerDelegate* pIPlayerDelegate)
 :m_pAVFormatCtx(NULL)
 {
-    m_pCommandResponseObject = pICommandResponse;
+    m_pIPlayerDelegate = pIPlayerDelegate;
     
     //this will start the message center thread , and will create the message center object
     CCMessageCenter::GetInstance()->InitMessageCenter();
@@ -26,27 +66,28 @@ CCPlayer::CCPlayer(ICommandResponse* pICommandResponse)
     //This is the first time call , just for create the system clock instance
     CCSystemClock::GetInstance();
     
+    //this is register for all ffmpeg action
+    av_register_all();
+    
+    //this is for mutli-thread ffmpeg working
+    if(av_lockmgr_register(ffmpegLockManager))
+    {
+        // TODO Failure av_lockmgr_register
+    }
+    
+    m_pALWrapper = new CCALWrapper();
+    
     Launch();
 }
 
 CCPlayer::~CCPlayer()
 {
-    //we can not unregister the message center here
-    //CCMessageCenter::GetInstance()->UnRegisterMessageReceiver(MESSAGE_OBJECT_ENUM_PLAYER);
-}
-
-void CCPlayer::SetGLRenderView(IGLView* pIGLRenderView)
-{
-    CCMessageCenter::GetInstance()->PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
-                                                MESSAGE_OBJECT_ENUM_VIDEO_RENDER,
-                                                MESSAGE_TYPE_ENUM_INIT_GLRENDER_OBJECT,
-                                                Any(pIGLRenderView));
 }
     
 void CCPlayer::SetVolume(float volume)
 {
-    CCMessageCenter::GetInstance()->PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
-                                                MESSAGE_OBJECT_ENUM_AUDIO_RENDER,
+    CCMessageCenter::GetInstance()->PostMessage(MESSAGE_OBJECT_ENUM_CLIENT,
+                                                MESSAGE_OBJECT_ENUM_PLAYER,
                                                 MESSAGE_TYPE_ENUM_SET_VOLUME,
                                                 Any(volume));
 }
@@ -119,22 +160,22 @@ void CCPlayer::PostMessage(MessageObjectId messageSender,
 
 void CCPlayer::ReceiverMessage(const SmartPtr<Event>& rSmtEvent)
 {
-    m_spinLockMessageQueue.Lock();
+    //m_spinLockMessageQueue.Lock();
     m_messageQueue.push(rSmtEvent);
-    m_spinLockMessageQueue.UnLock();
+    //m_spinLockMessageQueue.UnLock();
 }
 
 bool CCPlayer::PopFrontMessage(SmartPtr<Event>& rSmtEvent)
 {
     bool bGetMsg = false;
-    m_spinLockMessageQueue.Lock();
+    //m_spinLockMessageQueue.Lock();
     if(!m_messageQueue.empty())
     {
         rSmtEvent = m_messageQueue.front();
         m_messageQueue.pop();
         bGetMsg = true;
     }
-    m_spinLockMessageQueue.UnLock();
+    //m_spinLockMessageQueue.UnLock();
     return bGetMsg;
 }
 
@@ -150,14 +191,34 @@ void CCPlayer::Run()
             {
                 case COMMAND_TYPE_ENUM_OPEN:
                 {
+                    sleep(5);
+                    
                     std::string mediaUrl = any_cast<std::string>(event.GetPtr()->anyParams);
-
-                    CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_DATA_MANAGER);
-
-                    PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
-                                MESSAGE_OBJECT_ENUM_DATA_MANAGER,
-                                MESSAGE_TYPE_ENUM_OPEN_FILE,
-                                Any(mediaUrl));
+                    
+                    int ret = OpenFile(mediaUrl);
+                    
+                    if (ret == SUCCESS)
+                    {
+                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_DATA_MANAGER);
+                    }
+                    
+                    if(ret == SUCCESS && g_pPlayerContext->m_asIndex != -1)
+                    {
+                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_AUDIO_DECODER);
+                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_AUDIO_RENDER);
+                    }
+                    
+                    if(ret == SUCCESS && g_pPlayerContext->m_vsIndex != -1)
+                    {
+                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_VIDEO_DECODER);
+                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_VIDEO_RENDER);
+                    }
+                    
+                    if(m_pIPlayerDelegate != NULL)
+                    {
+                        m_pIPlayerDelegate->OnCommandOpen(ret);
+                    }
+                    
                 }
                 break;
                 case COMMAND_TYPE_ENUM_CONTINUE:
@@ -195,64 +256,10 @@ void CCPlayer::Run()
                                 Any());
                 }
                 break;
-                case MESSAGE_TYPE_ENUM_OPENED_FILE:
+                case MESSAGE_TYPE_ENUM_SET_VOLUME:
                 {
-                    std::vector<Any> openedParams = any_cast<std::vector<Any> >(event.GetPtr()->anyParams);
-                    int ret = any_cast<int>(openedParams[0]);
-                    m_pAVFormatCtx = any_cast<AVFormatContext*>(openedParams[1]);
-                    int asIndex = any_cast<int>(openedParams[2]);
-                    int vsIndex = any_cast<int>(openedParams[3]);
-
-                    if(asIndex != -1)
-                    {
-                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_AUDIO_DECODER);
-
-                        std::vector<Any> audioStreamInfo;
-                        audioStreamInfo.push_back(Any(m_pAVFormatCtx));
-                        audioStreamInfo.push_back(Any(asIndex));
-
-                        PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
-                                    MESSAGE_OBJECT_ENUM_AUDIO_DECODER,
-                                    MESSAGE_TYPE_ENUM_FINDED_AUDIO_STREAM,
-                                    Any(audioStreamInfo));
-
-                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_AUDIO_RENDER);
-                    }
-
-                    if(vsIndex != -1)
-                    {
-                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_VIDEO_DECODER);
-
-                        std::vector<Any> videoStreamInfo;
-                        videoStreamInfo.push_back(Any(m_pAVFormatCtx));
-                        videoStreamInfo.push_back(Any(vsIndex));
-
-                        PostMessage(MESSAGE_OBJECT_ENUM_PLAYER,
-                                    MESSAGE_OBJECT_ENUM_VIDEO_DECODER,
-                                    MESSAGE_TYPE_ENUM_FINDED_VIDEO_STREAM,
-                                    Any(videoStreamInfo));
-
-                        CCModuleManager::AddModule(MESSAGE_OBJECT_ENUM_VIDEO_RENDER);
-                    }
-
-                    if(m_pCommandResponseObject != NULL)
-                    {
-                        m_pCommandResponseObject->OnCommandOpen(ret);
-                    }
-                }
-                break;
-                case MESSAGE_TYPE_ENUM_DATA_MANAGER_EOF:
-                {
-//                    CCModuleManager::DeleteModule(MESSAGE_OBJECT_ENUM_DATA_MANAGER);
-//                    
-//                    isAllModuleAreDeaded += DATA_MANAGER_DEADED;
-//                    
-//                    if (isAllModuleAreDeaded == ALL_MODULE_ARE_DEADED)
-//                    {
-//                        DestructPlayerSystem();
-//                    }
-                    //m_bRunning = false;
-                    //continue;
+                    float volume = any_cast<float>(event.GetPtr()->anyParams);
+                    g_pPlayerContext->m_pALWrapper->SetVolume(volume);
                 }
                 break;
                 case MESSAGE_TYPE_ENUM_AUDIO_RENDER_DEADED:
@@ -316,20 +323,74 @@ void CCPlayer::Run()
                 }
                 break;
             }
+        }else // end if get a message
+        {
+            //if nothing to do , just wait 10 ms , don't warry
+            usleep(10 * 1000);
         }
-
-        //std::cout << "The play is running" << std::endl;
-    }
+    } // end of switch case
+}
+    
+int CCPlayer::OpenFile(const std::string& mediaUrl)
+{
+    //AVFormatContext *pFormatCtx = NULL;
+    
+    g_pPlayerContext = new CCPlayerContext(m_pALWrapper);
+    
+    if(avformat_open_input(&g_pPlayerContext->m_pAVFormatContext,mediaUrl.c_str(), NULL, NULL) != 0)
+	{
+		std::cout << "can not open media file" << std::endl;
+		return FAILURE;
+	}else
+	{
+		std::cout << "open media file" << std::endl;
+	}
+    
+    if(avformat_find_stream_info(g_pPlayerContext->m_pAVFormatContext, NULL) < 0)
+	{
+		std::cout << "can not retrieve file info" << std::endl;
+		return FAILURE;
+	}else
+	{
+		std::cout << "retrieve file info" << std::endl;
+	}
+    
+	av_dump_format(g_pPlayerContext->m_pAVFormatContext,0, mediaUrl.c_str(), 0);
+    
+    g_pPlayerContext->FindContextInfomation(m_pIPlayerDelegate);
+    
+    //we just create the player context
+    //g_pPlayerContext = new CCPlayerContext(pFormatCtx, m_pALWrapper, m_pIPlayerDelegate);
+    
+    return SUCCESS;
 }
     
 void CCPlayer::DestructPlayerSystem()
 {
+    g_pPlayerContext->ReleaseContextInformation();
+    
+    //close the format
+    avformat_close_input(&g_pPlayerContext->m_pAVFormatContext);
+    
     CCSystemClock::DestoryInstance();
     
     //this fuction will wait util the message center thread is deaded
     CCMessageCenter::DestoryInstance();
     
-    m_pCommandResponseObject->OnCommandStop(0);
+    if (m_pALWrapper != NULL)
+    {
+        //release the al subsystem
+        delete m_pALWrapper;
+        m_pALWrapper = NULL;
+    }
+    
+    if (g_pPlayerContext != NULL)
+    {
+        delete g_pPlayerContext;
+        g_pPlayerContext = NULL;
+    }
+    
+    m_pIPlayerDelegate->OnCommandStop(0);
 }
 
 }

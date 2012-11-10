@@ -35,6 +35,8 @@
     CCHeaderViewController*     _headerViewController;
     CCFooterViewController*     _footerViewController;
     CCVolumeViewController*     _volumeViewController;
+    
+    NSTimer*    _updateProgressTimer;
 }
 
 @end
@@ -118,10 +120,17 @@
     NSLog(@"The mediaPath is : %@", medaiPath);
     
     m_pPlayerAdapter->Open(medaiPath);
+    
+    _updateProgressTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateProgress:) userInfo:nil repeats:YES];
+    
+    //Start the time
+    [_updateProgressTimer fire];
 }
 
 - (void)viewDidUnload
 {
+    _updateProgressTimer = nil;
+    
     //clean up the C++ object
     if (m_pPlayerAdapter != NULL)
     {
@@ -151,12 +160,14 @@
 #pragma --mark "cc player callbacks"
 - (void)onCommandOpen:(NSArray*)errCode
 {
-    m_pPlayerAdapter->SetGLRenderView();
-    m_pPlayerAdapter->SetVolume(0.5);
+//    m_pPlayerAdapter->SetGLRenderView();
+    m_pPlayerAdapter->SetVolume(0.0f);
 }
 
 - (void)onCommandStop:(NSArray*)errCode
 {
+    [_updateProgressTimer invalidate];
+    
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -212,6 +223,47 @@
     _headerViewController.view.hidden = !_headerViewController.view.hidden;
     _footerViewController.view.hidden = !_footerViewController.view.hidden;
     _volumeViewController.view.hidden = !_volumeViewController.view.hidden;
+}
+
+#include <string>
+std::string FormatTime(int64_t time)
+{
+    std::string result;
+    
+    int64_t divide = 60 * 60 * 60;
+    
+    while (divide)
+    {
+        int64_t tmp = time / divide;
+        
+        char buf[3] = {0};
+        sprintf(buf,"%02lld", tmp);
+        
+        result += buf;
+        
+        if (divide > 60)
+        {
+            result += ":";
+        }
+        
+        time %= divide;
+        divide /= 60;
+    }
+    
+    return result;
+}
+
+#pragma --mark "this is just a timer call back"
+- (void)updateProgress:(id)userInfo
+{
+    int64_t totalDuration = m_pPlayerAdapter->GetTotalDuration();
+    static int64_t currentPosition = 0; //m_pPlayerAdapter->GetCurrentPosition();
+    
+    currentPosition ++;
+    std::string strTotalDuration = FormatTime(totalDuration);
+    std::string strCurrentPostion = FormatTime(currentPosition);
+    
+    [_footerViewController setIndicationTimeValue:[[NSString alloc] initWithUTF8String:std::string(strCurrentPostion + "/" + strTotalDuration).c_str()]];
 }
 
 @end

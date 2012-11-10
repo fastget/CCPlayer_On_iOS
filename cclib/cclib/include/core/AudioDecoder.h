@@ -28,22 +28,9 @@ public:
     virtual void Run();
 
 private:
-    int GetCodecContext(AVFormatContext* pFormatCtx,
-                        int streamIndex,
-                        AVCodecContext** ppCodecContext,
-                        AVRational* pAudioTimeBase);
-
-    int GetAudioInformation(AVCodecContext *pAudioCtx,
-                            CCChannels* pChannels,
-                            CCRates* pRates,
-                            CCType* pFormat);
-
-private:
     std::queue<SmartPtr<Event> > m_messageQueue;
-    CCSpinLock m_spinLockMessageQueue;
+    //CCSpinLock m_spinLockMessageQueue;
 
-private:
-    std::queue<SmartPtr<CCPacket> > m_audioPacketQueue;
 };
 
 }

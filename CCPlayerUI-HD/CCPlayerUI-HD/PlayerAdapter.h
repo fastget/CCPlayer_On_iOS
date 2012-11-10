@@ -10,15 +10,14 @@
 #define CCPlayer_PlayerAdapter_h
 
 #import "PlayerAdapterProtocol.h"
-#include "IGLView.h"
-#include "ICommandResponse.h"
+#include "IPlayerDelegate.h"
 
 namespace CCPlayer
 {
     class CCPlayer;
 }
 
-class CCPlayerViewAdapter: public CCPlayer::IGLView, public CCPlayer::ICommandResponse
+class CCPlayerViewAdapter: public CCPlayer::IPlayerDelegate
 {
 public:
     CCPlayerViewAdapter(NSObject<PlayerDelegate>* delegate);
@@ -34,6 +33,8 @@ public:
     
 public:
     void SetVolume(float volume);
+    int64_t GetTotalDuration();
+    int64_t GetCurrentPosition();
     
 public:
     void SetGLRenderView();

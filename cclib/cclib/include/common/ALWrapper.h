@@ -10,10 +10,10 @@
 namespace CCPlayer
 {
 
-class ALWrapper {
+class CCALWrapper {
 public:
-	ALWrapper(const std::string &deviceName = "");
-	virtual ~ALWrapper();
+	CCALWrapper(const std::string &deviceName = "");
+	virtual ~CCALWrapper();
 
 public:
     void SetAudioCtx(ALenum channels, ALuint rate, ALenum format);

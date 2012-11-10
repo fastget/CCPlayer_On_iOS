@@ -1,6 +1,6 @@
 #include "GLWrapper.h"
-#include "IGLView.h"
 #include "VideoDef.h"
+#include "IPlayerDelegate.h"
 
 namespace CCPlayer
 {
@@ -62,8 +62,8 @@ const std::string fragmentShaderString = SHADER_STRING
  
 );
 
-CCGLWrapper::CCGLWrapper()
-:m_pIGLRenderView(NULL)
+CCGLWrapper::CCGLWrapper(IPlayerDelegate* pIPlayerDelegate)
+:m_pIPlayerDelegate(pIPlayerDelegate)
 ,m_bFirstTime(true)
 {
 }
@@ -73,18 +73,13 @@ CCGLWrapper::~CCGLWrapper()
     glGetError();
 }
 
-void CCGLWrapper::SetIGLRenderView(IGLView* pGLRenderView)
-{
-    m_pIGLRenderView = pGLRenderView;
-}
-
 void CCGLWrapper::InitGL()
 {
     int x = 0;
     int y = 0;
     int width = 0;
     int height = 0;
-    m_pIGLRenderView->GetRenderViewRect(&x, &y, &width, &height);
+    m_pIPlayerDelegate->GetRenderViewRect(&x, &y, &width, &height);
     
     glViewport(0, 0, width, height);
     
@@ -240,19 +235,19 @@ GLuint CCGLWrapper::setupTexture()
     
 int CCGLWrapper::ClearGLRenderView()
 {
-    m_pIGLRenderView->PreDrawFrame();
+    m_pIPlayerDelegate->PreDrawFrame();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    m_pIGLRenderView->SwapBuffers();
+    m_pIPlayerDelegate->SwapBuffers();
     
     return true;
 }
 
 int CCGLWrapper::DrawFrame(VideoFrame* pVideoFrame, int width, int height)
 {
-    m_pIGLRenderView->PreDrawFrame();
+    m_pIPlayerDelegate->PreDrawFrame();
     
     if (m_bFirstTime)
     {
@@ -292,7 +287,7 @@ int CCGLWrapper::DrawFrame(VideoFrame* pVideoFrame, int width, int height)
     
     glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_BYTE, 0);
     
-    m_pIGLRenderView->SwapBuffers();
+    m_pIPlayerDelegate->SwapBuffers();
     
     return 0;
 }
